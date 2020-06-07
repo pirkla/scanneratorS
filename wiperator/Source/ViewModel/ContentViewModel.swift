@@ -11,7 +11,7 @@ import AVFoundation
 
 class ContentViewModel: ObservableObject{
 //    var credentials: Credentials = Credent ials()
-    
+    var credentials: Credentials = Credentials(Username: "", Password: "", Server: "")
     @Published var networkID: String = ""
     @Published var apiKey: String = ""
     public var basicCreds : String {

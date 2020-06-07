@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct LoginView: View {
+    @State private var showLogin = true
+
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var loginViewModel = LoginViewModel()
     var completion: (Credentials) -> Void
@@ -18,8 +20,7 @@ struct LoginView: View {
     
     var body: some View {
         VStack() {
-            Spacer()
-            HStack(alignment: .top){
+            HStack(){
                 Text("URL")
                     .multilineTextAlignment(.leading)
                     .frame(width: 200.0, alignment: .trailing)
@@ -69,6 +70,12 @@ struct LoginView: View {
                 }
                 .fixedSize()
                 .background(Color.init("TextBackground"))
+            }
+        }
+        .sheet(isPresented: self.$showLogin) {
+            LoginView() {
+                (credentials) in
+                print(credentials)
             }
         }
     }

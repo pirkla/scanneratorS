@@ -19,55 +19,6 @@ struct ContentView: View {
     var body: some View {
         VStack() {
             Spacer()
-            HStack(alignment: .top){
-                Text("URL")
-                    .multilineTextAlignment(.leading)
-                    .frame(width: 200.0, alignment: .trailing)
-                HStack {
-                TextField("https://sample.jamfcloud.com", text: $contentViewModel.enteredURL)
-                    .textContentType(.URL)
-                }
-                .frame(width: 350.0, height: 22.0)
-                .background(Color.init("TextBackground"))
-            }
-            HStack() {
-                Text("Network ID")
-                    .frame(width: 200.0, alignment: .trailing)
-                HStack {
-                    TextField("", text: $contentViewModel.networkID)
-                }.frame(width: 350.0, height: 22.0)
-                .background(Color.init("TextBackground"))
-            }
-            HStack() {
-                Text("API Key")
-                    .multilineTextAlignment(.leading)
-                    .frame(width: 200.0, alignment: .trailing)
-                HStack {
-                SecureField("", text:  $contentViewModel.apiKey)
-                }
-                .frame(width: 350.0, height: 22.0)
-                .background(Color.init("TextBackground"))
-            }
-            HStack {
-                Button(action: {
-                    self.contentViewModel.loadCredentials()
-                }) {
-                    Text("Load")
-                }
-                Button(action: {
-                    do {
-                        try self.contentViewModel.syncronizeCredentials()
-                    }
-                    catch {
-                        print("Failed to save credentials with error: \(error)")
-                    }
-                }) {
-                    Text("Test Connection")
-                }
-                .fixedSize()
-                .background(Color.init("TextBackground"))
-            }            
-            
             HStack() {
                 Text("Search Type")
                 Picker(selection: $contentViewModel.searchIndex, label: EmptyView()) {

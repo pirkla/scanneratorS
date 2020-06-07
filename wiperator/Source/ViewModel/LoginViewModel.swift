@@ -17,13 +17,15 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    @Published var enteredURL: String = "" {
-        willSet(newValue){
-            baseURL = URLBuilder.BuildURL(baseURL: newValue)
+    @Published var enteredURL: String = ""
+    
+    var credentials: Credentials {
+        get {
+            return Credentials(Username: networkID, Password: apiKey, Server: enteredURL)
         }
     }
     
-    var baseURL: URLComponents = URLComponents()
+//    var baseURL: URLComponents = URLComponents()
     @Published var saveCredentials = true
 
     func loadCredentials() {
