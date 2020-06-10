@@ -8,37 +8,25 @@
 
 import Foundation
 import AVFoundation
+import Combine
 
 class ContentViewModel: ObservableObject{
-//    var credentials: Credentials = Credent ials()
-    var credentials: Credentials = Credentials(Username: "", Password: "", Server: "")
-    @Published var networkID: String = ""
-    @Published var apiKey: String = ""
-    public var basicCreds : String {
-        get {
-            return String("\(networkID):\(apiKey)").toBase64()
-        }
-    }
-    
-    @Published var enteredURL: String = "" {
-        willSet(newValue){
-            baseURL = URLBuilder.BuildURL(baseURL: newValue)
-        }
-    }
-    
-    var baseURL: URLComponents = URLComponents()
 
+    var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
+
+    var searchTask: URLSessionDataTask?
     @Published var assetTag: String = "" {
         willSet(newValue){
-            print(newValue)
-            DeviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: newValue){
+//            print(newValue)
+            searchTask?.cancel()
+            searchTask = DeviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: newValue){
                 [weak self]
                 (result) in
                 switch result {
                 case .success(let devices):
                     DispatchQueue.main.async {
                         self?.deviceArray = devices
-                        print(devices)
+//                        print(devices)
                     }
 
                 case .failure(let error):
@@ -50,19 +38,21 @@ class ContentViewModel: ObservableObject{
             }
         }
     }
-    
-    @Published var deviceArray = Array<Device>()
-    
-    @Published var saveCredentials = true
-    
+    let objectWillChange = PassthroughSubject<ContentViewModel,Never>()
+    @Published var deviceArray = Array<Device>() {
+        willSet(newValue) { objectWillChange.send(self)
+        }
+    }
+        
     var searchModelArray = [ SearchModel(title:"Serial Number", value: "serialnumber"),
                              SearchModel(title:"Asset Tag", value: "assettag")
     ]
     @Published var searchIndex = 0
     
-    public func DeviceSearch(searchType: String, search: String, completion: @escaping (Result<[Device], Error>) -> Void){
+    public func DeviceSearch(searchType: String, search: String, completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
         let queryArray = [URLQueryItem(name: searchType,value: search)]
-        Device.AllDevicesRequest(baseURL: baseURL, filters: queryArray, credentials: basicCreds, session: URLSession.shared) {(result) in
+        return Device.AllDevicesRequest(baseURL: self.credentials.Server, filters: queryArray, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
+            (result) in
             switch result {
             case .success(let allDevices):
                 completion(.success(allDevices.devices))
@@ -73,71 +63,57 @@ class ContentViewModel: ObservableObject{
         }
     }
     
-//    public func ReadConfig(){
-//        if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
-//            if let myServerURL = managedConf["serverURL"] as? String{
-//                self.enteredURL = myServerURL
-//            }
-//            if let myNetworkID = managedConf["networkID"] as? String{
-//                self.networkID = myNetworkID
-//            }
-//            if let myApiKey = managedConf["apiKey"] as? String{
-//                self.apiKey = myApiKey
-//            }
-//        }
-//        if let myServerURL = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String {
-//            self.enteredURL = myServerURL
-//        }
-//        if let myNetworkID = Bundle.main.object(forInfoDictionaryKey: "networkID") as? String {
-//            self.networkID = myNetworkID
-//        }
-//        if let myApiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String {
-//            self.apiKey = myApiKey
+    public func UpdateNotes(udid: String, notes: String) {
+        _ = DeviceUpdateRequest(udid: udid, notes: notes).submitDeviceUpdate(baseUrl: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared){
+            (result) in
+            switch result {
+            case .success(let response):
+                self.SearchBetter(searchValue: self.assetTag)
+//                completion(.success(allDevices.devices))
+                print(response)
+            case .failure(let error):
+//                completion(.failure(error))
+                print(error)
+            }
+        }
+    }
+    
+    public func SearchBetter(searchValue: String) {
+        searchTask?.cancel()
+        searchTask = DeviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: searchValue){
+            [weak self]
+            (result) in
+            switch result {
+            case .success(let devices):
+                DispatchQueue.main.async {
+                    self?.deviceArray = devices
+//                        print(devices)
+                }
+
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self?.deviceArray = Array<Device>()
+                    print(error)
+                }
+            }
+        }
+    }
+    
+//    public func UpdateNotes()
+    
+//    func checkCameraAccess(completion: @escaping (Bool)->Void) {
+//        switch AVCaptureDevice.authorizationStatus(for: .video) {
+//            case .authorized:
+//                completion(true)
+//            default:
+//                AVCaptureDevice.requestAccess(for: .video) { granted in
+//                    if granted {
+//                        completion(true)
+//                    }
+//                    else {
+//                        completion(false)
+//                    }
+//                }
 //        }
 //    }
-    
-    func loadCredentials() {
-        enteredURL = UserDefaults.standard.string(forKey: "jamfSchoolServer") ?? enteredURL
-        do {
-            let credentials = try SecurityWrapper.loadCredentials(server: enteredURL)
-            networkID = credentials.networkID
-            apiKey = credentials.apiKey
-        }
-        catch {
-            print("Error loading credentials: \(error)")
-        }
-    }
-    
-    func syncronizeCredentials() throws{
-        if saveCredentials {
-            UserDefaults.standard.set(enteredURL, forKey: "jamfSchoolServer")
-            do {
-                try SecurityWrapper.saveCredentials(networkID: networkID, apiKey: apiKey, server: enteredURL)
-                }
-            catch {
-                print("failed to save credentials with error: \(error)")
-            }
-        }
-        else {
-            do {
-                try SecurityWrapper.removeCredentials(server: enteredURL, networkID: networkID)
-            }
-        }
-    }
-    
-    func checkCameraAccess(completion: @escaping (Bool)->Void) {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
-            case .authorized: // The user has previously granted access to the camera.
-                completion(true)
-            default: // The user has not yet been asked for camera access.
-                AVCaptureDevice.requestAccess(for: .video) { granted in
-                    if granted {
-                        completion(true)
-                    }
-                    else {
-                        completion(false)
-                    }
-                }
-        }
-    }
 }

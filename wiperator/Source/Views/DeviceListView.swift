@@ -25,7 +25,7 @@ struct DeviceListView: View {
                         print("doesn'texist")
                         self.selected = nil // !!! unwind at once
                     }
-                    }
+                    }, tag: device, selection: self.$selected
                     )
                 {
                 DeviceRow(device: device, credentials: self.credentials)
@@ -38,8 +38,10 @@ struct DeviceListView: View {
                     self.localStorage = items
             }
         }
+        .onAppear {
+            self.localStorage = self.contentViewModel.deviceArray // ! initial load from model
+        }
     }
-
 }
 
 //struct DeviceListView_Previews: PreviewProvider {
