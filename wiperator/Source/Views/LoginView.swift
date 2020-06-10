@@ -9,12 +9,12 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var showLogin = true
-
+    @State private var serverError = ""
+    @State private var loggingIn = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var loginViewModel = LoginViewModel()
-    var completion: (Credentials) -> Void
-    init(completion: @escaping (Credentials)->Void) {
+    var completion: (Credentials,[Device]) -> Void
+    init(completion: @escaping (Credentials,[Device])->Void) {
         self.completion = completion
     }
     
@@ -49,42 +49,68 @@ struct LoginView: View {
                 .frame(width: 350.0, height: 22.0)
                 .background(Color.init("TextBackground"))
             }
+            HStack() {
+                Toggle(isOn: $loginViewModel.saveCredentials) {
+                EmptyView()
+                }
+                .frame(width: 200.0, alignment: .trailing)
+                Text("Save Credentials")
+                    .frame(width: 350.0, height: 22.0, alignment: .leading)
+            }
+            .frame(width: 350.0, height: 22.0)
+            Spacer().frame(height:30)
             HStack {
                 Button(action: {
-                    self.loginViewModel.loadCredentials()
-                }) {
-                    Text("Load")
-                }
-                Button(action: {
-                    self.completion(Credentials(Username: "stuff", Password: "pass", Server: "server"))
-                    print("finish it")
-                    self.presentationMode.wrappedValue.dismiss()
-                    do {
-                        try self.loginViewModel.syncronizeCredentials()
+                    self.loggingIn = true
+                    self.loginViewModel.DeviceSearch() {
+                        result in
+                        switch result {
+                        case .success(let devices):
+//                            print(devices)
+                            self.completion(self.loginViewModel.credentials,devices)
+                            self.presentationMode.wrappedValue.dismiss()
+                            self.loggingIn = false
+                            do {
+                                try self.loginViewModel.syncronizeCredentials()
+                            }
+                            catch {
+
+                                print("Failed to save credentials with error: \(error)")
+                            }
+                        case .failure(let error):
+                            self.serverError = "Failed to log in\n \(error.localizedDescription)"
+                            print(error)
+                            self.loggingIn = false
+                        }
                     }
-                    catch {
-                        print("Failed to save credentials with error: \(error)")
-                    }
+
                 }) {
-                    Text("Test Connection")
+                    Text("Login")
+                        .padding(.all, 10.0)
                 }
                 .fixedSize()
                 .background(Color.init("TextBackground"))
+                .cornerRadius(10)
+            }
+            HStack {
+                Text(serverError)
+                    .padding(.all, 10.0)
+                    .multilineTextAlignment(.center)
             }
         }
-        .sheet(isPresented: self.$showLogin) {
-            LoginView() {
-                (credentials) in
-                print(credentials)
-            }
-        }
+        .disabled(self.loggingIn)
+        .onAppear {
+                    self.loginViewModel.loadCredentials()
+        //            self.contentViewModel.ReadConfig()
+                    
+                }
     }
 }
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView() {
-            (credentials) in
+            (credentials,devices)  in
         }
     }
 }

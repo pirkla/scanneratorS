@@ -18,9 +18,16 @@ struct ContentView: View {
     
     var body: some View {
         VStack() {
+            HStack() {
+                Button(action: {
+                    self.showLogin = true
+                }) {
+                    Text("Login")
+                }
+            }
             Spacer()
             HStack() {
-                Text("Search Type")
+//                Text("Search Type")
                 Picker(selection: $contentViewModel.searchIndex, label: EmptyView()) {
                 ForEach(0 ..< contentViewModel.searchModelArray.count) {
                     index in
@@ -41,15 +48,16 @@ struct ContentView: View {
                 HStack {
                     #if !targetEnvironment(macCatalyst)
                     Button(action: {
-                        self.contentViewModel.checkCameraAccess() {
-                            (result) in
-                            switch result{
-                            case true:
-                                self.showScanner = true
-                            case false:
-                                self.showScanner = false
-                            }
-                        }
+//                        self.contentViewModel.checkCameraAccess() {
+//                            (result) in
+//                            switch result{
+//                            case true:
+//                                self.showScanner = true
+//                            case false:
+//                                self.showScanner = false
+//                            }
+//                        }
+                        self.showScanner = true
                     }) {
                         Image(systemName: "camera.fill")
                     }.sheet(isPresented: self.$showScanner) {
@@ -72,22 +80,28 @@ struct ContentView: View {
                 .frame(width: 350.0, height: 22.0)
                 .background(Color.init("TextBackground"))
             }
-            DeviceListView(listArray: contentViewModel.deviceArray, baseUrl: self.contentViewModel.baseURL, credentials: self.contentViewModel.basicCreds)
-
-        }.onAppear {
-            self.contentViewModel.loadCredentials()
-//            self.scannerViewModel.startCapture()
-//            self.contentViewModel.ReadConfig()
-            
+            DeviceListView(contentViewModel: contentViewModel, updateFunc: self.contentViewModel.UpdateNotes, credentials: self.contentViewModel.credentials)
         }
+//        .aspectRatio(contentMode: .fit)
         .sheet(isPresented: self.$showLogin) {
             LoginView() {
-                (credentials) in
-                print(credentials)
+                (credentials,devices) in
+//                print(credentials)
+                self.contentViewModel.credentials = credentials
+                DispatchQueue.main.async {
+                    print(devices)
+                    self.contentViewModel.deviceArray = devices
+                }
             }
         }
+        .frame(minWidth: 200, idealWidth: 400, maxWidth: .infinity)
+//        .frame(width: geo.size.width)
+//        .resizable()
+//        .aspectRatio(contentMode: .fit)
+//        .frame(width: geo.size.width)
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

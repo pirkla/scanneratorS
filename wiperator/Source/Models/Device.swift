@@ -25,6 +25,12 @@ struct Device: Codable, Identifiable {
     var apps: [App]?
     var model: DeviceModel?
     var os : OSType?
+    var notes: String?
+    var isCheckedIn: Bool {
+        get {
+            return notes == "Checked In"
+        }
+    }
     
     enum CodingKeys: CodingKey {
         case UDID
@@ -36,6 +42,7 @@ struct Device: Codable, Identifiable {
         case apps
         case model
         case os
+        case notes
     }
 }
 struct DeviceModel: Codable {
@@ -72,17 +79,21 @@ extension AppEntry: Hashable {
     }
 }
 
-extension Device{
-    
-    func toJSON() -> Data? {
-        let encoder = JSONEncoder()
-        guard let dataToSubmit = try? encoder.encode(self) else {
-            return nil
-        }
-        return dataToSubmit
+extension Device: Hashable {
+    static func == (lhs: Device, rhs: Device) -> Bool {
+        return (lhs.id == rhs.id && lhs.UDID == rhs.UDID)
     }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(UDID)
+    }
+}
+
+
+
+extension Device{
+
     
-    static func AllDevicesRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void) {
+    static func AllDevicesRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
         let dataTask = session.dataTask(request: request) {
             (result) in
             switch result {
@@ -102,80 +113,24 @@ extension Device{
             }
         }
         dataTask.resume()
+        return dataTask
     }
     
-    static func AllDevicesRequest(baseURL: URLComponents,filters: [URLQueryItem],credentials: String, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void) {
+    static func AllDevicesRequest(baseURL: URLComponents,filters: [URLQueryItem] = [],credentials: String, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
         var urlComponents = baseURL
         urlComponents.path="/api/devices"
         urlComponents.queryItems = filters
         guard let myUrl = urlComponents.url else {
-            return completion(.failure(NSError()))
+            completion(.failure(NSError()))
+            return nil
         }
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.get,accept: ContentType.json)
-        AllDevicesRequest(request: myRequest, session: session){
+        let dataTask = AllDevicesRequest(request: myRequest, session: session){
             (result) in
             completion(result)
         }
-    }
-}
-
-struct WipeRequestModel: Codable {
-    var udid: String?
-    var clearActivationLock: String
-    enum CodingKeys: CodingKey {
-        case clearActivationLock
+        return dataTask
     }
 }
 
 
-extension WipeRequestModel{
-    
-    
-    
-    func toJSON() -> Data? {
-        let encoder = JSONEncoder()
-        guard let dataToSubmit = try? encoder.encode(self) else {
-            return nil
-        }
-        return dataToSubmit
-    }
-    
-    static func SubmitWipeRequest(baseURL: URLComponents,credentials: String, wipeRequestModel: WipeRequestModel,session: URLSession, completion: @escaping (Result<WipeResponseModel,Error>)->Void){
-        var urlComponents = baseURL
-        urlComponents.path="/api/devices/\(wipeRequestModel.udid ?? "")/wipe"
-        guard let myUrl = urlComponents.url else {
-            return completion(.failure(NSError()))
-        }
-        
-        let jsonData = wipeRequestModel.toJSON()
-        
-        let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.post, dataToSubmit: jsonData, contentType: ContentType.json, accept: ContentType.json)
-        
-        let dataTask = session.dataTask(request: myRequest) {
-            (result) in
-            switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let responseObject = try decoder.decode(WipeResponseModel.self, from: data)
-                    print(responseObject)
-                    completion(.success(responseObject))
-                }
-                catch {
-                    print(error)
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-        dataTask.resume()
-    }
-}
-
-struct WipeResponseModel: Codable {
-    var code: Int?
-    var message: String?
-    var device: String?
-}

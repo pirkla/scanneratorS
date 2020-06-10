@@ -11,21 +11,19 @@ import Foundation
 class LoginViewModel: ObservableObject {
     @Published var networkID: String = ""
     @Published var apiKey: String = ""
-    public var basicCreds : String {
-        get {
-            return String("\(networkID):\(apiKey)").toBase64()
+    @Published var enteredURL: String = "" {
+        willSet(newValue){
+            baseURL = URLBuilder.BuildURL(baseURL: newValue)
         }
     }
-    
-    @Published var enteredURL: String = ""
+    var baseURL: URLComponents = URLComponents()
     
     var credentials: Credentials {
         get {
-            return Credentials(Username: networkID, Password: apiKey, Server: enteredURL)
+            return Credentials(Username: networkID, Password: apiKey, Server: baseURL)
         }
     }
     
-//    var baseURL: URLComponents = URLComponents()
     @Published var saveCredentials = true
 
     func loadCredentials() {
@@ -56,5 +54,39 @@ class LoginViewModel: ObservableObject {
             }
         }
     }
+    
+    public func DeviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
+        return Device.AllDevicesRequest(baseURL: baseURL, credentials: credentials.BasicCreds, session: URLSession.shared) {(result) in
+            switch result {
+            case .success(let allDevices):
+                completion(.success(allDevices.devices))
+            case .failure(let error):
+                completion(.failure(error))
+                print(error)
+            }
+        }
+    }
+    //    public func ReadConfig(){
+    //        if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
+    //            if let myServerURL = managedConf["serverURL"] as? String{
+    //                self.enteredURL = myServerURL
+    //            }
+    //            if let myNetworkID = managedConf["networkID"] as? String{
+    //                self.networkID = myNetworkID
+    //            }
+    //            if let myApiKey = managedConf["apiKey"] as? String{
+    //                self.apiKey = myApiKey
+    //            }
+    //        }
+    //        if let myServerURL = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String {
+    //            self.enteredURL = myServerURL
+    //        }
+    //        if let myNetworkID = Bundle.main.object(forInfoDictionaryKey: "networkID") as? String {
+    //            self.networkID = myNetworkID
+    //        }
+    //        if let myApiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String {
+    //            self.apiKey = myApiKey
+    //        }
+    //    }
     
 }

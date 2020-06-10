@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		710DB8D72482E6260064B088 /* KeychainError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB8D62482E6260064B088 /* KeychainError.swift */; };
 		710DB8DD248351D40064B088 /* CodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB8DC248351D40064B088 /* CodeScannerView.swift */; };
+		711BED03248F1DEE00D15CC9 /* DataTaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711BED02248F1DEE00D15CC9 /* DataTaskError.swift */; };
+		711BED052490701E00D15CC9 /* testview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711BED042490701E00D15CC9 /* testview.swift */; };
 		713F1A50248194CE00E24C40 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713F1A4F248194CE00E24C40 /* SearchModel.swift */; };
 		719E6602248481740040ABD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6601248481740040ABD9 /* LoginView.swift */; };
 		719E6604248481ED0040ABD9 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6603248481ED0040ABD9 /* LoginViewModel.swift */; };
@@ -16,7 +18,11 @@
 		719E660824849AE00040ABD9 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E660724849AE00040ABD9 /* SearchView.swift */; };
 		719E660A24849AEF0040ABD9 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E660924849AEF0040ABD9 /* SearchViewModel.swift */; };
 		71E1C277247F6BFE00113824 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C276247F6BFE00113824 /* ErrorView.swift */; };
-		71E1C279247F6E6A00113824 /* DeleteDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C278247F6E6A00113824 /* DeleteDeviceView.swift */; };
+		71E1C279247F6E6A00113824 /* WipeDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C278247F6E6A00113824 /* WipeDeviceView.swift */; };
+		71F7058A248DC03B0089387E /* WipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F70589248DC03B0089387E /* WipeRequest.swift */; };
+		71F7058C248DC07A0089387E /* DeviceUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F7058B248DC07A0089387E /* DeviceUpdateRequest.swift */; };
+		71F7058E248DC0D30089387E /* JSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F7058D248DC0D30089387E /* JSResponse.swift */; };
+		71F70592248DEE760089387E /* DeviceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F70591248DEE760089387E /* DeviceDetailView.swift */; };
 		71F90C8324820AC800A9D801 /* SecurityWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F90C8224820AC800A9D801 /* SecurityWrapper.swift */; };
 		71FD3D50247F241C001CC553 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D4F247F241C001CC553 /* AppDelegate.swift */; };
 		71FD3D52247F241C001CC553 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D51247F241C001CC553 /* SceneDelegate.swift */; };
@@ -29,7 +35,7 @@
 		71FD3D83247F2461001CC553 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D80247F2461001CC553 /* URLSessionExtension.swift */; };
 		71FD3D84247F2461001CC553 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D81247F2461001CC553 /* StringExtension.swift */; };
 		71FD3D85247F2461001CC553 /* URLRequestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D82247F2461001CC553 /* URLRequestExtension.swift */; };
-		71FD3D88247F246B001CC553 /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D87247F246B001CC553 /* DeviceModel.swift */; };
+		71FD3D88247F246B001CC553 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D87247F246B001CC553 /* Device.swift */; };
 		71FD3D8E247F4155001CC553 /* DeviceListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D8D247F4155001CC553 /* DeviceListView.swift */; };
 		71FD3D90247F465F001CC553 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D8F247F465F001CC553 /* URLBuilder.swift */; };
 		71FD3D93247F46A7001CC553 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D92247F46A7001CC553 /* ContentViewModel.swift */; };
@@ -55,6 +61,8 @@
 /* Begin PBXFileReference section */
 		710DB8D62482E6260064B088 /* KeychainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainError.swift; sourceTree = "<group>"; };
 		710DB8DC248351D40064B088 /* CodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScannerView.swift; sourceTree = "<group>"; };
+		711BED02248F1DEE00D15CC9 /* DataTaskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTaskError.swift; sourceTree = "<group>"; };
+		711BED042490701E00D15CC9 /* testview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testview.swift; sourceTree = "<group>"; };
 		713F1A4F248194CE00E24C40 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		719E6601248481740040ABD9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		719E6603248481ED0040ABD9 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -62,7 +70,11 @@
 		719E660724849AE00040ABD9 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		719E660924849AEF0040ABD9 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		71E1C276247F6BFE00113824 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
-		71E1C278247F6E6A00113824 /* DeleteDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceView.swift; sourceTree = "<group>"; };
+		71E1C278247F6E6A00113824 /* WipeDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WipeDeviceView.swift; sourceTree = "<group>"; };
+		71F70589248DC03B0089387E /* WipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WipeRequest.swift; sourceTree = "<group>"; };
+		71F7058B248DC07A0089387E /* DeviceUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUpdateRequest.swift; sourceTree = "<group>"; };
+		71F7058D248DC0D30089387E /* JSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSResponse.swift; sourceTree = "<group>"; };
+		71F70591248DEE760089387E /* DeviceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailView.swift; sourceTree = "<group>"; };
 		71F90C8224820AC800A9D801 /* SecurityWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityWrapper.swift; sourceTree = "<group>"; };
 		71FD3D4C247F241C001CC553 /* Wiperator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wiperator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71FD3D4F247F241C001CC553 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,7 +93,7 @@
 		71FD3D80247F2461001CC553 /* URLSessionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		71FD3D81247F2461001CC553 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		71FD3D82247F2461001CC553 /* URLRequestExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestExtension.swift; sourceTree = "<group>"; };
-		71FD3D87247F246B001CC553 /* DeviceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceModel.swift; sourceTree = "<group>"; };
+		71FD3D87247F246B001CC553 /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		71FD3D89247F247F001CC553 /* wiperator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wiperator.entitlements; sourceTree = "<group>"; };
 		71FD3D8D247F4155001CC553 /* DeviceListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceListView.swift; sourceTree = "<group>"; };
 		71FD3D8F247F465F001CC553 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
@@ -201,6 +213,7 @@
 				71FD3D80247F2461001CC553 /* URLSessionExtension.swift */,
 				71FD3D81247F2461001CC553 /* StringExtension.swift */,
 				71FD3D82247F2461001CC553 /* URLRequestExtension.swift */,
+				711BED02248F1DEE00D15CC9 /* DataTaskError.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -208,11 +221,14 @@
 		71FD3D86247F246B001CC553 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				71FD3D87247F246B001CC553 /* DeviceModel.swift */,
+				71FD3D87247F246B001CC553 /* Device.swift */,
 				713F1A4F248194CE00E24C40 /* SearchModel.swift */,
 				71F90C8224820AC800A9D801 /* SecurityWrapper.swift */,
 				710DB8D62482E6260064B088 /* KeychainError.swift */,
 				719E6605248485D50040ABD9 /* Credentials.swift */,
+				71F70589248DC03B0089387E /* WipeRequest.swift */,
+				71F7058B248DC07A0089387E /* DeviceUpdateRequest.swift */,
+				71F7058D248DC0D30089387E /* JSResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -223,9 +239,11 @@
 				71FD3D53247F241C001CC553 /* ContentView.swift */,
 				71FD3D8D247F4155001CC553 /* DeviceListView.swift */,
 				71E1C276247F6BFE00113824 /* ErrorView.swift */,
-				71E1C278247F6E6A00113824 /* DeleteDeviceView.swift */,
+				71E1C278247F6E6A00113824 /* WipeDeviceView.swift */,
+				71F70591248DEE760089387E /* DeviceDetailView.swift */,
 				719E6601248481740040ABD9 /* LoginView.swift */,
 				719E660724849AE00040ABD9 /* SearchView.swift */,
+				711BED042490701E00D15CC9 /* testview.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -376,9 +394,13 @@
 				710DB8D72482E6260064B088 /* KeychainError.swift in Sources */,
 				710DB8DD248351D40064B088 /* CodeScannerView.swift in Sources */,
 				71FD3D83247F2461001CC553 /* URLSessionExtension.swift in Sources */,
+				71F7058C248DC07A0089387E /* DeviceUpdateRequest.swift in Sources */,
+				71F70592248DEE760089387E /* DeviceDetailView.swift in Sources */,
+				711BED03248F1DEE00D15CC9 /* DataTaskError.swift in Sources */,
 				71FD3D50247F241C001CC553 /* AppDelegate.swift in Sources */,
-				71FD3D88247F246B001CC553 /* DeviceModel.swift in Sources */,
-				71E1C279247F6E6A00113824 /* DeleteDeviceView.swift in Sources */,
+				71F7058E248DC0D30089387E /* JSResponse.swift in Sources */,
+				71FD3D88247F246B001CC553 /* Device.swift in Sources */,
+				71E1C279247F6E6A00113824 /* WipeDeviceView.swift in Sources */,
 				71FD3D84247F2461001CC553 /* StringExtension.swift in Sources */,
 				719E6604248481ED0040ABD9 /* LoginViewModel.swift in Sources */,
 				71FD3D85247F2461001CC553 /* URLRequestExtension.swift in Sources */,
@@ -391,6 +413,8 @@
 				71F90C8324820AC800A9D801 /* SecurityWrapper.swift in Sources */,
 				71FD3D8E247F4155001CC553 /* DeviceListView.swift in Sources */,
 				71FD3D54247F241C001CC553 /* ContentView.swift in Sources */,
+				71F7058A248DC03B0089387E /* WipeRequest.swift in Sources */,
+				711BED052490701E00D15CC9 /* testview.swift in Sources */,
 				71E1C277247F6BFE00113824 /* ErrorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,7 +587,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"wiperator/Preview Content\"";
-				DEVELOPMENT_TEAM = U6L73Q3H3V;
+				DEVELOPMENT_TEAM = 5B77FF9LPA;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = wiperator/Info.plist;
@@ -572,7 +596,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperator2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperator;
 				PRODUCT_NAME = Wiperator;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
@@ -591,7 +615,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"wiperator/Preview Content\"";
-				DEVELOPMENT_TEAM = U6L73Q3H3V;
+				DEVELOPMENT_TEAM = 5B77FF9LPA;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = wiperator/Info.plist;
@@ -600,7 +624,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperator2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperator;
 				PRODUCT_NAME = Wiperator;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";

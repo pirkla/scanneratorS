@@ -9,48 +9,72 @@
 import SwiftUI
 
 struct DeviceListView: View {
-    var listArray: [Device] = []
-    var baseUrl: URLComponents
-    var credentials: String
+    @ObservedObject var contentViewModel: ContentViewModel
+//    @Binding var listArray: [Device]
+    @State private var localStorage: [Device] = []
+    @State private var selected: Device? = nil
+    let updateFunc: (String,String) -> Void
     
+    var credentials: Credentials
     var body: some View {
-        List(listArray) { device in
-            DeviceRow(device: device, baseUrl: self.baseUrl, credentials: self.credentials)
+        NavigationView{
+            List(contentViewModel.deviceArray) { device in
+                NavigationLink(destination: DeviceDetailView(device: device, credentials: self.credentials,updateFunc:self.updateFunc).onReceive(self.contentViewModel.$deviceArray) {
+                    items in
+                    if !items.contains(device) {
+                        print("doesn'texist")
+                        self.selected = nil // !!! unwind at once
+                    }
+                    }
+                    )
+                {
+                DeviceRow(device: device, credentials: self.credentials)
+                }
+            }
+
+        }
+        .onReceive(contentViewModel.$deviceArray) { items  in
+                DispatchQueue.main.async {
+                    self.localStorage = items
+            }
         }
     }
+
 }
 
-struct DeviceListView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeviceListView(baseUrl: URLComponents(), credentials: "")
-    }
-}
+//struct DeviceListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DeviceListView(credentials: Credentials(Username: "name", Password: "pass", Server: URLComponents()))
+//    }
+//}
 
 
 struct DeviceRow: View {
     @State private var showModal = false
 
     var device: Device
-    var baseUrl: URLComponents
-    var credentials: String
+    var credentials: Credentials
     
     var body: some View {
         HStack {
+            CheckedInImage(isCheckedIn: device.isCheckedIn)
             Text(device.name ?? "")
             Text(device.assetTag ?? "")
-            Button(action: {
-                self.showModal = true
-            }) {
-                Text("Show modal")
-            }.sheet(isPresented: self.$showModal) {
-                DeleteDeviceView(title: "Wiping device \(self.device.name ?? "unknown")", description: "Are you sure you?", device: self.device, baseUrl: self.baseUrl, credentials: self.credentials)
-            }
         }
     }
+    func CheckedInImage(isCheckedIn: Bool) -> Image {
+        if isCheckedIn {
+            return Image(systemName: "tray.and.arrow.down.fill")
+        }
+        else {
+            return Image(systemName: "tray.and.arrow.up.fill")
+        }
+    }
+
 }
 
 struct DeviceRow_Previews: PreviewProvider {
     static var previews: some View {
-        DeviceRow(device: Device(), baseUrl: URLComponents(), credentials: "")
+        DeviceRow(device: Device(), credentials: Credentials(Username: "", Password: "", Server: URLComponents()))
     }
 }
