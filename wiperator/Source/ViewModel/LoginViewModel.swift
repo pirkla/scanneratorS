@@ -29,7 +29,7 @@ class LoginViewModel: ObservableObject {
     func loadCredentials() {
         enteredURL = UserDefaults.standard.string(forKey: "jamfSchoolServer") ?? enteredURL
         do {
-            let credentials = try SecurityWrapper.loadCredentials(server: enteredURL)
+            let credentials = try Credentials.loadCredentials(server: enteredURL)
             networkID = credentials.networkID
             apiKey = credentials.apiKey
         }
@@ -42,7 +42,7 @@ class LoginViewModel: ObservableObject {
         if saveCredentials {
             UserDefaults.standard.set(enteredURL, forKey: "jamfSchoolServer")
             do {
-                try SecurityWrapper.saveCredentials(networkID: networkID, apiKey: apiKey, server: enteredURL)
+                try Credentials.saveCredentials(networkID: networkID, apiKey: apiKey, server: enteredURL)
                 }
             catch {
                 print("failed to save credentials with error: \(error)")
@@ -50,7 +50,7 @@ class LoginViewModel: ObservableObject {
         }
         else {
             do {
-                try SecurityWrapper.removeCredentials(server: enteredURL, networkID: networkID)
+                try Credentials.removeCredentials(server: enteredURL, networkID: networkID)
             }
         }
     }

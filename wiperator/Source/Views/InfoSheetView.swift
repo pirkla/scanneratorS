@@ -8,16 +8,24 @@
 
 import SwiftUI
 
-struct ErrorView: View {
+struct InfoSheetView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     let title: String
     let description: String
-//    let icon = Image("CFBundlePrimaryIcon")
-
+    let image: Image?
+    
     var body: some View {
-      Group {
-        Text("Modal view")
+      HStack {
+        VStack {
+            HStack{
+            Text(title)
+            image
+            }
+            Text(description)
+        }
+        
+
         Button(action: {
            self.presentationMode.wrappedValue.dismiss()
         }) {
@@ -29,6 +37,6 @@ struct ErrorView: View {
 
 struct ErrorView_Previews: PreviewProvider {
     static var previews: some View {
-        ErrorView(title: "Preview", description: "Description Preview")
+        InfoSheetView(title: "Preview", description: "Description Preview", image: nil)
     }
 }

@@ -13,6 +13,10 @@ struct AllDevices: Codable {
     var count: Int?
     var devices: [Device]
 }
+struct DeviceResponse: Codable {
+    var code: Int?
+    var device: Device
+}
 struct Device: Codable, Identifiable {
     var id : UUID? = UUID()
     var UDID: String?
@@ -20,10 +24,8 @@ struct Device: Codable, Identifiable {
     var serialNumber: String?
     var assetTag: String?
     var inTrash: Bool?
-//    var class: String?
     var name: String?
     var apps: [App]?
-    var model: DeviceModel?
     var os : OSType?
     var notes: String?
     var isCheckedIn: Bool {
@@ -40,7 +42,6 @@ struct Device: Codable, Identifiable {
         case inTrash
         case name
         case apps
-        case model
         case os
         case notes
     }
@@ -68,30 +69,48 @@ struct AppEntry {
     var version:String=""
     var deviceType:String=""
 }
-extension AppEntry: Hashable {
-    static func == (lhs: AppEntry, rhs: AppEntry) -> Bool {
-        return (lhs.name == rhs.name && lhs.version == rhs.version && lhs.deviceType == rhs.deviceType)
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(version)
-        hasher.combine(deviceType)
-    }
-}
-
-extension Device: Hashable {
-    static func == (lhs: Device, rhs: Device) -> Bool {
-        return (lhs.id == rhs.id && lhs.UDID == rhs.UDID)
-    }
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(UDID)
-    }
-}
-
 
 
 extension Device{
 
+    static func DeviceRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
+        let dataTask = session.dataTask(request: request) {
+            (result) in
+            switch result {
+            case .success(let data):
+                print(String(data: data, encoding: .utf8)!)
+                do {
+                    let decoder = JSONDecoder()
+                    decoder.keyDecodingStrategy = .convertFromSnakeCase
+                    let responseObject = try decoder.decode(DeviceResponse.self, from: data)
+                    completion(.success(responseObject))
+                }
+                catch {
+                    print(error)
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+        dataTask.resume()
+        return dataTask
+    }
+    
+    static func DeviceRequest(baseURL: URLComponents,udid: String,credentials: String, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
+        var urlComponents = baseURL
+        urlComponents.path="/api/devices/\(udid)"
+        guard let myUrl = urlComponents.url else {
+            completion(.failure(NSError()))
+            return nil
+        }
+        let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.get,accept: ContentType.json)
+        let dataTask = DeviceRequest(request: myRequest, session: session){
+            (result) in
+            completion(result)
+        }
+        return dataTask
+    }
     
     static func AllDevicesRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
         let dataTask = session.dataTask(request: request) {

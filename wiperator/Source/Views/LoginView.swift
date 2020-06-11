@@ -66,7 +66,6 @@ struct LoginView: View {
                         result in
                         switch result {
                         case .success(let devices):
-//                            print(devices)
                             self.completion(self.loginViewModel.credentials,devices)
                             self.presentationMode.wrappedValue.dismiss()
                             self.loggingIn = false
@@ -74,11 +73,12 @@ struct LoginView: View {
                                 try self.loginViewModel.syncronizeCredentials()
                             }
                             catch {
-
+                                print("a")
                                 print("Failed to save credentials with error: \(error)")
                             }
                         case .failure(let error):
                             self.serverError = "Failed to log in\n \(error.localizedDescription)"
+                            print("b")
                             print(error)
                             self.loggingIn = false
                         }

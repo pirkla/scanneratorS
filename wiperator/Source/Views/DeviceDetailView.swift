@@ -5,16 +5,16 @@
 //  Created by Andrew Pirkl on 6/7/20.
 //  Copyright © 2020 Pirklator. All rights reserved.
 //
-
+// ugh todo: cleanup and split up responsibilities
 import SwiftUI
 
 struct DeviceDetailView: View {
 
     @State var showModal = false
-    let device: Device
+    @State var device: Device
     let credentials: Credentials
     
-    let updateFunc: (String,String) -> Void
+    let updateFunc: ((String, String, @escaping (Result<JSResponse, Error>) -> Void) -> ())?
 
     var body: some View {
       Group {
@@ -23,6 +23,8 @@ struct DeviceDetailView: View {
             Text(device.serialNumber ?? "")
             Text(device.assetTag ?? "")
         }
+        
+        
         HStack() {
             Button(action: {
                 self.showModal = true
@@ -35,56 +37,25 @@ struct DeviceDetailView: View {
                 }
                 .background(Color.init("TextBackground"))
             }.sheet(isPresented: self.$showModal) {
-                WipeDeviceView(title: "Wiping: \(self.device.name ?? "unknown")", description: "Are you sure?", device: self.device, credentials: self.credentials)
+                OptionSheet(title: "Wiping: \(self.device.name ?? "Unknown")", description: "Are you sure?") { choice in
+                    if choice {
+                    _ = WipeRequest(udid: self.device.UDID, clearActivationLock: "true").submitWipeRequest(baseURL: self.credentials.Server, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
+                        _ in
+                    }
+                    }
+                }
             }
             .cornerRadius(10)
-            CheckedInButton(isCheckedIn: device.isCheckedIn)
-        }
-      }
-    }
-    
-    func CheckedInButton(isCheckedIn: Bool)-> AnyView{
-        if isCheckedIn {
-            return AnyView(CheckInButtonView(device: self.device, credentials: self.credentials, updateFunc: self.updateFunc))
-        }
-        else {
-            return AnyView(CheckoutButtonView(device: self.device, credentials: self.credentials, updateFunc: self.updateFunc))
-        }
-    }
-    
-    func CheckArray() {
-        
-    }
-}
 
-struct CheckInButtonView: View {
-    let device: Device
-    let credentials: Credentials
-    let updateFunc: (String,String) -> Void
-    var body: some View {
-        Button(action: {
-            self.updateFunc(self.device.UDID ?? "","Checked Out")
-        }) {
-            HStack {
-                Image(systemName: "rectangle.badge.xmark")
-                    .padding([.top, .leading, .bottom], 10.0)
-                Text("Check Out")
-                    .padding([.top, .bottom, .trailing], 10.0)
-            }
-                .background(Color.init("TextBackground"))
-        }
-            .cornerRadius(10)
-    }
-}
-
-struct CheckoutButtonView: View {
-    let device: Device
-    let credentials: Credentials
-    let updateFunc: (String,String) -> Void
-    var body: some View {
-        HStack() {
+            
+            if !device.isCheckedIn {
             Button(action: {
-                self.updateFunc(self.device.UDID ?? "","Checked In")
+                if let updateFunc = self.updateFunc {
+                    updateFunc(self.device.UDID ?? "","Checked In") {_ in
+                        self.updateDevice()
+                    }
+
+                }
             }) {
                 HStack {
                     Image(systemName: "rectangle.badge.checkmark")
@@ -95,12 +66,47 @@ struct CheckoutButtonView: View {
                 .background(Color.init("TextBackground"))
             }
             .cornerRadius(10)
+            }
+            else {
+                Button(action: {
+                    if let updateFunc = self.updateFunc {
+                        updateFunc(self.device.UDID ?? "","Checked Out") {_ in
+                            
+                            self.updateDevice()
+                        }
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "rectangle.badge.xmark")
+                            .padding([.top, .leading, .bottom], 10.0)
+                        Text("Check Out")
+                            .padding([.top, .bottom, .trailing], 10.0)
+                    }
+                        .background(Color.init("TextBackground"))
+                }
+                    .cornerRadius(10)
+                
+            }
+        }
+
+      }
+
+    }
+    func updateDevice() {
+        Device.DeviceRequest(baseURL: credentials.Server, udid: device.UDID ?? "", credentials: credentials.BasicCreds, session: URLSession.shared){
+            result in
+            switch result {
+            case .success(let deviceResponse):
+                self.device = deviceResponse.device
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }
 
-//struct DeviceDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DeviceDetailView(title: "Preview", description: "Description Preview", device: Device(), credentials:Credentials(Username: "", Password: "", Server: URLComponents()), updateFunc: ("stuff","stuff")->Void)
-//    }
-//}
+struct DeviceDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        DeviceDetailView(device: Device(), credentials:Credentials(Username: "", Password: "", Server: URLComponents()), updateFunc: nil)
+    }
+}

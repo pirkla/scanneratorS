@@ -13,11 +13,11 @@ struct OptionSheet: View {
     
     let title: String
     let description: String
-//    let device: Device
-//    let credentials: Credentials
-    
+
     var completion: (Bool) -> Void
-    init(completion: @escaping (Bool)->Void) {
+    init(title: String, description: String, completion: @escaping (Bool)->Void) {
+        self.title = title
+        self.description = description
         self.completion = completion
     }
 
@@ -28,9 +28,6 @@ struct OptionSheet: View {
         VStack {
             Button(action: {
                 self.completion(true)
-//                _ = WipeRequest(udid: self.device.UDID, clearActivationLock: "true").submitWipeRequest(baseURL: self.credentials.Server, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
-//                    _ in
-//                }
                self.presentationMode.wrappedValue.dismiss()
             }) {
                 HStack {
@@ -50,7 +47,7 @@ struct OptionSheet: View {
                 HStack {
                     Image(systemName: "xmark")
                         .padding([.top, .leading, .bottom], 10.0)
-                    Text("Cancel")
+                    Text("No")
                         .padding([.top, .bottom, .trailing], 10.0)
                 }
                 .background(Color.init("TextBackground"))
@@ -64,6 +61,8 @@ struct OptionSheet: View {
 
 struct WipeDeviceView_Previews: PreviewProvider {
     static var previews: some View {
-        OptionSheet(title: "Preview", description: "Description Preview", device: Device(), credentials:Credentials(Username: "", Password: "", Server: URLComponents()))
+        OptionSheet(title: "Preview", description: "Description Preview"){_ in 
+            
+        }
     }
 }

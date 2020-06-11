@@ -12,8 +12,17 @@ struct ContentView: View {
     @ObservedObject var contentViewModel = ContentViewModel()
 //    @ObservedObject var scannerViewModel = ScannerViewModel()
     
-    @State private var showScanner = false
-    @State private var showLogin = true
+    @State private var showSheet = true
+    @State private var showLogin = true {
+        willSet(newValue){
+            showSheet = newValue
+        }
+    }
+    @State private var showScanner = false {
+        willSet(newValue){
+            showSheet = newValue
+        }
+    }
 
     
     var body: some View {
@@ -27,7 +36,6 @@ struct ContentView: View {
             }
             Spacer()
             HStack() {
-//                Text("Search Type")
                 Picker(selection: $contentViewModel.searchIndex, label: EmptyView()) {
                 ForEach(0 ..< contentViewModel.searchModelArray.count) {
                     index in
@@ -60,18 +68,6 @@ struct ContentView: View {
                         self.showScanner = true
                     }) {
                         Image(systemName: "camera.fill")
-                    }.sheet(isPresented: self.$showScanner) {
-                        CodeScannerView(codeTypes: [.qr,.aztec,.code128,.code39,.code39Mod43,.code93,.dataMatrix,.ean13,.ean8,.interleaved2of5,.itf14,.pdf417,.upce], simulatedData: "testdata") {
-                            result in
-                            self.showScanner = false
-                            switch result {
-                            case .success(let code):
-                                self.contentViewModel.assetTag = code
-                                print("Found code: \(code)")
-                            case .failure(let error):
-                                print(error.localizedDescription)
-                            }
-                        }
                     }
                     #endif
 
@@ -80,25 +76,42 @@ struct ContentView: View {
                 .frame(width: 350.0, height: 22.0)
                 .background(Color.init("TextBackground"))
             }
-            DeviceListView(contentViewModel: contentViewModel, updateFunc: self.contentViewModel.UpdateNotes, credentials: self.contentViewModel.credentials)
+            #if targetEnvironment(macCatalyst)
+            NavigationView {
+            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.UpdateNotes)
+            }
+            #else
+            NavigationView {
+            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.UpdateNotes)
+            }.navigationViewStyle(StackNavigationViewStyle())
+            #endif
         }
-//        .aspectRatio(contentMode: .fit)
-        .sheet(isPresented: self.$showLogin) {
-            LoginView() {
-                (credentials,devices) in
-//                print(credentials)
-                self.contentViewModel.credentials = credentials
-                DispatchQueue.main.async {
-                    print(devices)
-                    self.contentViewModel.deviceArray = devices
+        .sheet(isPresented: self.$showSheet) {
+            if self.showLogin {
+                LoginView() {
+                    (credentials,devices) in
+                    self.showLogin = false
+                    self.contentViewModel.credentials = credentials
+                    DispatchQueue.main.async {
+                        self.contentViewModel.deviceArray = devices
+                    }
+                }
+            }
+            else if self.showScanner {
+                CodeScannerView(codeTypes: [.qr,.aztec,.code128,.code39,.code39Mod43,.code93,.dataMatrix,.ean13,.ean8,.interleaved2of5,.itf14,.pdf417,.upce], simulatedData: "testdata") {
+                    result in
+                    self.showScanner = false
+                    switch result {
+                    case .success(let code):
+                        self.contentViewModel.assetTag = code
+                        print("Found code: \(code)")
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
                 }
             }
         }
         .frame(minWidth: 200, idealWidth: 400, maxWidth: .infinity)
-//        .frame(width: geo.size.width)
-//        .resizable()
-//        .aspectRatio(contentMode: .fit)
-//        .frame(width: geo.size.width)
     }
 }
 

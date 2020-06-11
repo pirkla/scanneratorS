@@ -8,16 +8,14 @@
 
 import Foundation
 import AVFoundation
-import Combine
 
 class ContentViewModel: ObservableObject{
 
     var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
-
+    @Published var errorText: String?
     var searchTask: URLSessionDataTask?
     @Published var assetTag: String = "" {
         willSet(newValue){
-//            print(newValue)
             searchTask?.cancel()
             searchTask = DeviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: newValue){
                 [weak self]
@@ -26,23 +24,17 @@ class ContentViewModel: ObservableObject{
                 case .success(let devices):
                     DispatchQueue.main.async {
                         self?.deviceArray = devices
-//                        print(devices)
                     }
-
                 case .failure(let error):
                     DispatchQueue.main.async {
                         self?.deviceArray = Array<Device>()
-                        print(error)
+//                        print(error)
                     }
                 }
             }
         }
     }
-    let objectWillChange = PassthroughSubject<ContentViewModel,Never>()
-    @Published var deviceArray = Array<Device>() {
-        willSet(newValue) { objectWillChange.send(self)
-        }
-    }
+    @Published var deviceArray = Array<Device>()
         
     var searchModelArray = [ SearchModel(title:"Serial Number", value: "serialnumber"),
                              SearchModel(title:"Asset Tag", value: "assettag")
@@ -63,16 +55,17 @@ class ContentViewModel: ObservableObject{
         }
     }
     
-    public func UpdateNotes(udid: String, notes: String) {
+    public func UpdateNotes(udid: String, notes: String, completion: @escaping (Result<JSResponse,Error>)->Void) {
         _ = DeviceUpdateRequest(udid: udid, notes: notes).submitDeviceUpdate(baseUrl: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared){
             (result) in
             switch result {
             case .success(let response):
+                #if targetEnvironment(macCatalyst)
                 self.SearchBetter(searchValue: self.assetTag)
-//                completion(.success(allDevices.devices))
-                print(response)
+                #endif
+                completion(.success(response))
             case .failure(let error):
-//                completion(.failure(error))
+                completion(.failure(error))
                 print(error)
             }
         }
@@ -98,9 +91,7 @@ class ContentViewModel: ObservableObject{
             }
         }
     }
-    
-//    public func UpdateNotes()
-    
+        
 //    func checkCameraAccess(completion: @escaping (Bool)->Void) {
 //        switch AVCaptureDevice.authorizationStatus(for: .video) {
 //            case .authorized:
