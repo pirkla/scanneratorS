@@ -8,30 +8,35 @@
 
 import Foundation
 import AVFoundation
+import SwiftUI
 
 class ContentViewModel: ObservableObject{
 
     var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
-    @Published var errorText: String?
     var searchTask: URLSessionDataTask?
+    
+    enum ActiveSheet {
+       case login, scanner, errorView
+    }
+    var activeSheet: ActiveSheet = .login {
+        willSet {
+            DispatchQueue.main.async {
+                self.showSheet = true
+            }
+        }
+    }
+    
+    @Published var showSheet = true
+    
+    @Published var errorDescription: String = "Unknown" {
+        willSet {
+            activeSheet = .errorView
+        }
+    }
+    
     @Published var assetTag: String = "" {
         willSet(newValue){
-            searchTask?.cancel()
-            searchTask = DeviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: newValue){
-                [weak self]
-                (result) in
-                switch result {
-                case .success(let devices):
-                    DispatchQueue.main.async {
-                        self?.deviceArray = devices
-                    }
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        self?.deviceArray = Array<Device>()
-//                        print(error)
-                    }
-                }
-            }
+            SearchBetter(searchValue: newValue)
         }
     }
     @Published var deviceArray = Array<Device>()
@@ -39,7 +44,7 @@ class ContentViewModel: ObservableObject{
     var searchModelArray = [ SearchModel(title:"Serial Number", value: "serialnumber"),
                              SearchModel(title:"Asset Tag", value: "assettag")
     ]
-    @Published var searchIndex = 0
+    var searchIndex = 0
     
     public func DeviceSearch(searchType: String, search: String, completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
         let queryArray = [URLQueryItem(name: searchType,value: search)]
@@ -67,6 +72,8 @@ class ContentViewModel: ObservableObject{
             case .failure(let error):
                 completion(.failure(error))
                 print(error)
+                //todo: handle non-200 response in jssresponse (maybe up the line a step) - why is that even a thing?
+                self.errorDescription = error.localizedDescription
             }
         }
     }
@@ -80,9 +87,7 @@ class ContentViewModel: ObservableObject{
             case .success(let devices):
                 DispatchQueue.main.async {
                     self?.deviceArray = devices
-//                        print(devices)
                 }
-
             case .failure(let error):
                 DispatchQueue.main.async {
                     self?.deviceArray = Array<Device>()
@@ -92,19 +97,33 @@ class ContentViewModel: ObservableObject{
         }
     }
         
-//    func checkCameraAccess(completion: @escaping (Bool)->Void) {
-//        switch AVCaptureDevice.authorizationStatus(for: .video) {
-//            case .authorized:
-//                completion(true)
-//            default:
-//                AVCaptureDevice.requestAccess(for: .video) { granted in
-//                    if granted {
-//                        completion(true)
-//                    }
-//                    else {
-//                        completion(false)
-//                    }
-//                }
-//        }
-//    }
+
+    
+    func currentModal() -> AnyView {
+        switch activeSheet {
+        case .login:
+            return AnyView(LoginView() {
+                (credentials,devices) in
+                self.credentials = credentials
+                DispatchQueue.main.async {
+                    self.deviceArray = devices
+                }
+            })
+        
+        case .scanner:
+            return AnyView(CodeScannerView(codeTypes: [.qr,.aztec,.code128,.code39,.code39Mod43,.code93,.dataMatrix,.ean13,.ean8,.interleaved2of5,.itf14,.pdf417,.upce], simulatedData: "testdata") {
+                result in
+                self.showSheet = false
+                switch result {
+                case .success(let code):
+                    self.assetTag = code
+                case .failure(let error):
+                    self.errorDescription = error.localizedDescription
+                    print(error.localizedDescription)
+                }
+            })
+        case .errorView:
+            return AnyView(InfoSheetView(title: "An error occurred", description: self.errorDescription, image: Image(systemName: "exclamationmark.octagon.fill")))
+        }
+    }
 }

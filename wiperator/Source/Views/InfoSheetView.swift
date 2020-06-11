@@ -23,13 +23,13 @@ struct InfoSheetView: View {
             image
             }
             Text(description)
-        }
-        
-
-        Button(action: {
-           self.presentationMode.wrappedValue.dismiss()
-        }) {
-          Text("Dismiss")
+                .padding(.all, 50.0)
+                .multilineTextAlignment(.center)
+            Button(action: {
+               self.presentationMode.wrappedValue.dismiss()
+            }) {
+              Text("Dismiss")
+            }
         }
       }
     }

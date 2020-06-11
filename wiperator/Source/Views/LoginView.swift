@@ -67,7 +67,9 @@ struct LoginView: View {
                         switch result {
                         case .success(let devices):
                             self.completion(self.loginViewModel.credentials,devices)
+                            DispatchQueue.main.async {
                             self.presentationMode.wrappedValue.dismiss()
+                            }
                             self.loggingIn = false
                             do {
                                 try self.loginViewModel.syncronizeCredentials()

@@ -10,26 +10,12 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var contentViewModel = ContentViewModel()
-//    @ObservedObject var scannerViewModel = ScannerViewModel()
-    
-    @State private var showSheet = true
-    @State private var showLogin = true {
-        willSet(newValue){
-            showSheet = newValue
-        }
-    }
-    @State private var showScanner = false {
-        willSet(newValue){
-            showSheet = newValue
-        }
-    }
-
     
     var body: some View {
         VStack() {
             HStack() {
                 Button(action: {
-                    self.showLogin = true
+                    self.contentViewModel.activeSheet = .login
                 }) {
                     Text("Login")
                 }
@@ -56,16 +42,7 @@ struct ContentView: View {
                 HStack {
                     #if !targetEnvironment(macCatalyst)
                     Button(action: {
-//                        self.contentViewModel.checkCameraAccess() {
-//                            (result) in
-//                            switch result{
-//                            case true:
-//                                self.showScanner = true
-//                            case false:
-//                                self.showScanner = false
-//                            }
-//                        }
-                        self.showScanner = true
+                        self.contentViewModel.activeSheet = .scanner
                     }) {
                         Image(systemName: "camera.fill")
                     }
@@ -86,30 +63,8 @@ struct ContentView: View {
             }.navigationViewStyle(StackNavigationViewStyle())
             #endif
         }
-        .sheet(isPresented: self.$showSheet) {
-            if self.showLogin {
-                LoginView() {
-                    (credentials,devices) in
-                    self.showLogin = false
-                    self.contentViewModel.credentials = credentials
-                    DispatchQueue.main.async {
-                        self.contentViewModel.deviceArray = devices
-                    }
-                }
-            }
-            else if self.showScanner {
-                CodeScannerView(codeTypes: [.qr,.aztec,.code128,.code39,.code39Mod43,.code93,.dataMatrix,.ean13,.ean8,.interleaved2of5,.itf14,.pdf417,.upce], simulatedData: "testdata") {
-                    result in
-                    self.showScanner = false
-                    switch result {
-                    case .success(let code):
-                        self.contentViewModel.assetTag = code
-                        print("Found code: \(code)")
-                    case .failure(let error):
-                        print(error.localizedDescription)
-                    }
-                }
-            }
+        .sheet(isPresented: self.$contentViewModel.showSheet) {
+            self.contentViewModel.currentModal()
         }
         .frame(minWidth: 200, idealWidth: 400, maxWidth: .infinity)
     }
@@ -118,6 +73,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(contentViewModel: ContentViewModel())
+        ContentView()
     }
 }

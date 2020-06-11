@@ -27,6 +27,8 @@ public struct CodeScannerView: UIViewControllerRepresentable {
         case badInput, badOutput, cancelled
     }
 
+    
+
     public class ScannerCoordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
         var parent: CodeScannerView
         var codeFound = false
@@ -189,7 +191,7 @@ public struct CodeScannerView: UIViewControllerRepresentable {
         
         @objc func buttonAction(sender: UIButton!) {
             delegate?.didFail(reason: .cancelled)
-            print("Cancelled Scan")
+//            print("Cancelled Scan")
         }
 
         override public func viewWillLayoutSubviews() {
