@@ -140,6 +140,7 @@ public struct CodeScannerView: UIViewControllerRepresentable {
         var previewLayer: AVCaptureVideoPreviewLayer!
         var delegate: ScannerCoordinator?
         var cancelButton: UIButton!
+        
 
         override public func viewDidLoad() {
             super.viewDidLoad()
@@ -149,7 +150,9 @@ public struct CodeScannerView: UIViewControllerRepresentable {
             cancelButton.setTitle("Cancel", for: .normal)
             cancelButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
             self.view.addSubview(cancelButton)
+            self.view.bringSubviewToFront(cancelButton)
             cancelButton.frame.origin.x = -100
+            
             
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(updateOrientation),

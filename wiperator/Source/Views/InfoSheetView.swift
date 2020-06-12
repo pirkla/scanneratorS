@@ -23,7 +23,7 @@ struct InfoSheetView: View {
             image
             }
             Text(description)
-                .padding(.all, 50.0)
+                .padding(.all, 40.0)
                 .multilineTextAlignment(.center)
             Button(action: {
                self.presentationMode.wrappedValue.dismiss()

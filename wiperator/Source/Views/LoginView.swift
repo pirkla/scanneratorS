@@ -23,37 +23,46 @@ struct LoginView: View {
             HStack(){
                 Text("URL")
                     .multilineTextAlignment(.leading)
-                    .frame(width: 200.0, alignment: .trailing)
+                    .frame(width: 100.0, alignment: .trailing)
                 HStack {
                 TextField("https://sample.jamfcloud.com", text: $loginViewModel.enteredURL)
                     .textContentType(.URL)
+                    .disableAutocorrection(true)
                 }
+                .padding(.horizontal, 7.0)
                 .frame(width: 350.0, height: 22.0)
                 .background(Color.init("TextBackground"))
+                .cornerRadius(10)
             }
             HStack() {
                 Text("Network ID")
-                    .frame(width: 200.0, alignment: .trailing)
+                    .frame(width: 100.0, alignment: .trailing)
                 HStack {
                     TextField("", text: $loginViewModel.networkID)
-                }.frame(width: 350.0, height: 22.0)
+                    .disableAutocorrection(true)
+                }
+                .padding(.horizontal, 7.0)
+                .frame(width: 350.0, height: 22.0)
                 .background(Color.init("TextBackground"))
+                .cornerRadius(10)
             }
             HStack() {
                 Text("API Key")
                     .multilineTextAlignment(.leading)
-                    .frame(width: 200.0, alignment: .trailing)
+                    .frame(width: 100.0, alignment: .trailing)
                 HStack {
                 SecureField("", text:  $loginViewModel.apiKey)
                 }
+                .padding(.horizontal, 7.0)
                 .frame(width: 350.0, height: 22.0)
                 .background(Color.init("TextBackground"))
+                .cornerRadius(10)
             }
             HStack() {
                 Toggle(isOn: $loginViewModel.saveCredentials) {
                 EmptyView()
                 }
-                .frame(width: 200.0, alignment: .trailing)
+                .frame(width: 100.0, alignment: .trailing)
                 Text("Save Credentials")
                     .frame(width: 350.0, height: 22.0, alignment: .leading)
             }

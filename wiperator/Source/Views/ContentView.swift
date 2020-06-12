@@ -20,7 +20,7 @@ struct ContentView: View {
                     Text("Login")
                 }
             }
-            Spacer()
+            .padding(.bottom, 20.0)
             HStack() {
                 Picker(selection: $contentViewModel.searchIndex, label: EmptyView()) {
                 ForEach(0 ..< contentViewModel.searchModelArray.count) {
@@ -32,26 +32,27 @@ struct ContentView: View {
                     }
                 }
             }
+            .padding(.bottom, 50.0)
             .frame(width: 300.0, height: 80.0)
-                .zIndex(-2)
+            .zIndex(-2)
+            
             
             HStack() {
                 Text("Search")
-                    .multilineTextAlignment(.leading)
-                    .frame(width: 200.0, alignment: .trailing)
                 HStack {
                     #if !targetEnvironment(macCatalyst)
                     Button(action: {
                         self.contentViewModel.activeSheet = .scanner
                     }) {
                         Image(systemName: "camera.fill")
+                            .frame(width: 30, height:30)
                     }
                     #endif
-
                     TextField("", text:  $contentViewModel.assetTag)
                 }
-                .frame(width: 350.0, height: 22.0)
+                .frame(width: 350.0, height: 30.0)
                 .background(Color.init("TextBackground"))
+                .cornerRadius(10)
             }
             #if targetEnvironment(macCatalyst)
             NavigationView {
