@@ -36,17 +36,27 @@ struct DeviceRow: View {
     
     var body: some View {
         HStack {
-            CheckedInImage(isCheckedIn: device.isCheckedIn)
+            DeviceImage(device.isiOS)
+            CheckedInImage(device.isCheckedIn)
             Text(device.name ?? "")
             Text(device.assetTag ?? "")
         }
     }
-    func CheckedInImage(isCheckedIn: Bool) -> Image {
+    func CheckedInImage(_ isCheckedIn: Bool) -> Image {
         if isCheckedIn {
             return Image(systemName: "tray.and.arrow.down.fill")
         }
         else {
             return Image(systemName: "tray.and.arrow.up.fill")
+        }
+    }
+    func DeviceImage(_ isiOS: Bool) -> AnyView {
+        if isiOS {
+            return AnyView(Image(systemName: "rectangle")
+                .rotationEffect(Angle(degrees: 90)))
+        }
+        else {
+            return AnyView(Image(systemName: "desktopcomputer"))
         }
     }
 

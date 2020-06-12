@@ -23,38 +23,38 @@ struct LoginView: View {
             HStack(){
                 Text("URL")
                     .multilineTextAlignment(.leading)
-                    .frame(width: 100.0, alignment: .trailing)
+                    .frame(width: 85, alignment: .trailing)
                 HStack {
                 TextField("https://sample.jamfcloud.com", text: $loginViewModel.enteredURL)
                     .textContentType(.URL)
                     .disableAutocorrection(true)
                 }
                 .padding(.horizontal, 7.0)
-                .frame(width: 350.0, height: 22.0)
+                .frame(idealWidth: 150.0 ,maxWidth: 350)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
             HStack() {
                 Text("Network ID")
-                    .frame(width: 100.0, alignment: .trailing)
+                    .frame(width: 85, alignment: .trailing)
                 HStack {
                     TextField("", text: $loginViewModel.networkID)
                     .disableAutocorrection(true)
                 }
                 .padding(.horizontal, 7.0)
-                .frame(width: 350.0, height: 22.0)
+                .frame(idealWidth: 150.0 ,maxWidth: 350)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
             HStack() {
                 Text("API Key")
                     .multilineTextAlignment(.leading)
-                    .frame(width: 100.0, alignment: .trailing)
+                    .frame(width: 85, alignment: .trailing)
                 HStack {
                 SecureField("", text:  $loginViewModel.apiKey)
                 }
                 .padding(.horizontal, 7.0)
-                .frame(width: 350.0, height: 22.0)
+                .frame(idealWidth: 150.0 ,maxWidth: 350)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
@@ -68,7 +68,9 @@ struct LoginView: View {
             }
             .frame(width: 350.0, height: 22.0)
             Spacer().frame(height:30)
-            HStack {
+            HStack(alignment:.top) {
+//                LogoView().scaleEffect(1)
+//                    .frame(width: 200.0, height: 200.0)
                 Button(action: {
                     self.loggingIn = true
                     self.loginViewModel.DeviceSearch() {
@@ -102,12 +104,14 @@ struct LoginView: View {
                 .fixedSize()
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
+
             }
             HStack {
                 Text(serverError)
                     .padding(.all, 10.0)
                     .multilineTextAlignment(.center)
             }
+
         }
         .disabled(self.loggingIn)
         .onAppear {

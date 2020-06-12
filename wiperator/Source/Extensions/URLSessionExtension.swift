@@ -10,9 +10,6 @@ import Foundation
 import os.log
 
 extension URLSession {
-    
-    
-    
     /**
      Run a dataTask escaping a result optionally adding a token provider for just in time authentication
      */

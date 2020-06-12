@@ -12,6 +12,7 @@
 		711BED03248F1DEE00D15CC9 /* DataTaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711BED02248F1DEE00D15CC9 /* DataTaskError.swift */; };
 		713F1A50248194CE00E24C40 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713F1A4F248194CE00E24C40 /* SearchModel.swift */; };
 		7186D4A02492E804006249E9 /* ScannerErrorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7186D49F2492E804006249E9 /* ScannerErrorExtension.swift */; };
+		7186D4A224932F44006249E9 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7186D4A124932F44006249E9 /* LogoView.swift */; };
 		719E6602248481740040ABD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6601248481740040ABD9 /* LoginView.swift */; };
 		719E6604248481ED0040ABD9 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6603248481ED0040ABD9 /* LoginViewModel.swift */; };
 		719E6606248485D50040ABD9 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6605248485D50040ABD9 /* Credentials.swift */; };
@@ -62,6 +63,7 @@
 		711BED02248F1DEE00D15CC9 /* DataTaskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTaskError.swift; sourceTree = "<group>"; };
 		713F1A4F248194CE00E24C40 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		7186D49F2492E804006249E9 /* ScannerErrorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerErrorExtension.swift; sourceTree = "<group>"; };
+		7186D4A124932F44006249E9 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		719E6601248481740040ABD9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		719E6603248481ED0040ABD9 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		719E6605248485D50040ABD9 /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				71E1C278247F6E6A00113824 /* OptionSheet.swift */,
 				71F70591248DEE760089387E /* DeviceDetailView.swift */,
 				719E6601248481740040ABD9 /* LoginView.swift */,
+				7186D4A124932F44006249E9 /* LogoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				7186D4A02492E804006249E9 /* ScannerErrorExtension.swift in Sources */,
 				71FD3D50247F241C001CC553 /* AppDelegate.swift in Sources */,
 				71F7058E248DC0D30089387E /* JSResponse.swift in Sources */,
+				7186D4A224932F44006249E9 /* LogoView.swift in Sources */,
 				71FD3D88247F246B001CC553 /* Device.swift in Sources */,
 				71E1C279247F6E6A00113824 /* OptionSheet.swift in Sources */,
 				71FD3D84247F2461001CC553 /* StringExtension.swift in Sources */,

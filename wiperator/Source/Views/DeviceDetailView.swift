@@ -17,14 +17,12 @@ struct DeviceDetailView: View {
     let updateFunc: ((String, String, @escaping (Result<JSResponse, Error>) -> Void) -> ())?
 
     var body: some View {
-      Group {
+      VStack {
         VStack {
             Text(device.name ?? "")
             Text(device.serialNumber ?? "")
             Text(device.assetTag ?? "")
         }
-        
-        
         HStack() {
             Button(action: {
                 self.showModal = true
@@ -88,9 +86,8 @@ struct DeviceDetailView: View {
                 
             }
         }
-
+        Spacer()
       }
-
     }
     func updateDevice() {
         Device.DeviceRequest(baseURL: credentials.Server, udid: device.UDID ?? "", credentials: credentials.BasicCreds, session: URLSession.shared){

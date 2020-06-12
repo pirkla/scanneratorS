@@ -33,6 +33,11 @@ struct Device: Codable, Identifiable {
             return notes == "Checked In"
         }
     }
+    var isiOS: Bool {
+        get {
+            return os?.prefix == "iOS"
+        }
+    }
     
     enum CodingKeys: CodingKey {
         case UDID
@@ -73,6 +78,8 @@ struct AppEntry {
 
 extension Device{
 
+    
+    
     static func DeviceRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
         let dataTask = session.dataTask(request: request) {
             (result) in

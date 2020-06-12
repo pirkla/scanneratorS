@@ -39,29 +39,35 @@ struct ContentView: View {
             
             HStack() {
                 Text("Search")
+                    .frame(width: 60.0)
                 HStack {
                     #if !targetEnvironment(macCatalyst)
                     Button(action: {
                         self.contentViewModel.activeSheet = .scanner
                     }) {
                         Image(systemName: "camera.fill")
+                            .padding(.leading, 7.0)
                             .frame(width: 30, height:30)
                     }
-                    #endif
                     TextField("", text:  $contentViewModel.assetTag)
+                    #else
+                    TextField("", text:  $contentViewModel.assetTag)
+                    .padding(.leading, 6.0)
+                    #endif
                 }
-                .frame(width: 350.0, height: 30.0)
+                .frame(idealWidth: 250.0,maxWidth: 350)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
             #if targetEnvironment(macCatalyst)
             NavigationView {
             DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.UpdateNotes)
-            }
+            }.labelsHidden()
             #else
             NavigationView {
             DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.UpdateNotes)
             }.navigationViewStyle(StackNavigationViewStyle())
+            .labelsHidden()
             #endif
         }
         .sheet(isPresented: self.$contentViewModel.showSheet) {
