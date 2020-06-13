@@ -17,6 +17,8 @@ class LoginViewModel: ObservableObject {
         }
     }
     var baseURL: URLComponents = URLComponents()
+    @Published var serverError = ""
+    @Published var loggingIn = false
     
     var credentials: Credentials {
         get {
@@ -66,27 +68,68 @@ class LoginViewModel: ObservableObject {
             }
         }
     }
-    //    public func ReadConfig(){
-    //        if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
-    //            if let myServerURL = managedConf["serverURL"] as? String{
-    //                self.enteredURL = myServerURL
-    //            }
-    //            if let myNetworkID = managedConf["networkID"] as? String{
-    //                self.networkID = myNetworkID
-    //            }
-    //            if let myApiKey = managedConf["apiKey"] as? String{
-    //                self.apiKey = myApiKey
-    //            }
-    //        }
-    //        if let myServerURL = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String {
-    //            self.enteredURL = myServerURL
-    //        }
-    //        if let myNetworkID = Bundle.main.object(forInfoDictionaryKey: "networkID") as? String {
-    //            self.networkID = myNetworkID
-    //        }
-    //        if let myApiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String {
-    //            self.apiKey = myApiKey
-    //        }
-    //    }
     
+    public func login(completion: @escaping (Credentials,[Device])->Void) {
+        loggingIn = true
+        deviceSearch() {
+            [weak self]
+            result in
+            guard let self = self else {
+                return
+            }
+            switch result {
+            case .success(let devices):
+                completion(self.credentials,devices)
+                DispatchQueue.main.async {
+//                    self.presentationMode.wrappedValue.dismiss()
+                    self.loggingIn = false
+                }
+                do {
+                    try self.syncronizeCredentials()
+                }
+                catch {
+                    print("Failed to save credentials with error: \(error)")
+                }
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    self.serverError = "Failed to log in\n \(error.localizedDescription)"
+                    print(error)
+                    self.loggingIn = false
+                }
+            }
+        }
+    }
+    
+    
+    public func readConfig() -> Bool{
+        if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
+            guard let myServerURL = managedConf["serverURL"] as? String else {
+                return false
+            }
+            self.enteredURL = myServerURL
+            guard let myNetworkID = managedConf["networkID"] as? String else {
+                return false
+            }
+            self.networkID = myNetworkID
+            guard let myApiKey = managedConf["apiKey"] as? String else {
+                return false
+            }
+            self.apiKey = myApiKey
+            return true
+            
+        }
+        guard let myServerURL = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String else {
+            return false
+        }
+        self.enteredURL = myServerURL
+        guard let myNetworkID = Bundle.main.object(forInfoDictionaryKey: "networkID") as? String else {
+            return false
+        }
+        self.networkID = myNetworkID
+        guard let myApiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String else {
+            return false
+        }
+        self.apiKey = myApiKey
+        return true
+    }
 }

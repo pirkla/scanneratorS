@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var serverError = ""
-    @State private var loggingIn = false
+//    @State private var serverError = ""
+//    @State private var loggingIn = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var loginViewModel = LoginViewModel()
     var completion: (Credentials,[Device]) -> Void
@@ -72,31 +72,13 @@ struct LoginView: View {
 //                LogoView().scaleEffect(1)
 //                    .frame(width: 200.0, height: 200.0)
                 Button(action: {
-                    self.loggingIn = true
-                    self.loginViewModel.deviceSearch() {
-                        result in
-                        switch result {
-                        case .success(let devices):
-                            self.completion(self.loginViewModel.credentials,devices)
-                            DispatchQueue.main.async {
+                    self.loginViewModel.login() {
+                        (credentials, devices) in
+                        self.completion(credentials, devices)
+                        DispatchQueue.main.async {
                             self.presentationMode.wrappedValue.dismiss()
-                            }
-                            self.loggingIn = false
-                            do {
-                                try self.loginViewModel.syncronizeCredentials()
-                            }
-                            catch {
-                                print("a")
-                                print("Failed to save credentials with error: \(error)")
-                            }
-                        case .failure(let error):
-                            self.serverError = "Failed to log in\n \(error.localizedDescription)"
-                            print("b")
-                            print(error)
-                            self.loggingIn = false
                         }
                     }
-
                 }) {
                     Text("Login")
                         .padding(.all, 10.0)
@@ -107,18 +89,25 @@ struct LoginView: View {
 
             }
             HStack {
-                Text(serverError)
+                Text(loginViewModel.serverError)
                     .padding(.all, 10.0)
                     .multilineTextAlignment(.center)
             }
 
         }
-        .disabled(self.loggingIn)
+        .disabled(self.loginViewModel.loggingIn)
         .onAppear {
-                    self.loginViewModel.loadCredentials()
-        //            self.contentViewModel.ReadConfig()
-                    
+            self.loginViewModel.loadCredentials()
+            if self.loginViewModel.readConfig() {
+                self.loginViewModel.login() {
+                    (credentials, devices) in
+                    self.completion(credentials, devices)
+                    DispatchQueue.main.async {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
                 }
+            }
+        }
     }
 }
 
@@ -126,6 +115,7 @@ struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView() {
             (credentials,devices)  in
+            
         }
     }
 }
