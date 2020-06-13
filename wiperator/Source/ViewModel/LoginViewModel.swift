@@ -55,8 +55,8 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    public func DeviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
-        return Device.AllDevicesRequest(baseURL: baseURL, credentials: credentials.BasicCreds, session: URLSession.shared) {(result) in
+    public func deviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
+        return Device.allDevicesRequest(baseURL: baseURL, credentials: credentials.BasicCreds, session: URLSession.shared) {(result) in
             switch result {
             case .success(let allDevices):
                 completion(.success(allDevices.devices))

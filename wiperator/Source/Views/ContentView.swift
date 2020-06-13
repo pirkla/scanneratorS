@@ -43,15 +43,24 @@ struct ContentView: View {
                 HStack {
                     #if !targetEnvironment(macCatalyst)
                     Button(action: {
-                        self.contentViewModel.activeSheet = .scanner
+                        self.contentViewModel.checkCameraAccess() {
+                            (result) in
+                            switch result{
+                            case true:
+                                self.contentViewModel.activeSheet = .scanner
+
+                            case false:
+                                print("camera access denied")
+                            }
+                        }
                     }) {
                         Image(systemName: "camera.fill")
                             .padding(.leading, 7.0)
                             .frame(width: 30, height:30)
                     }
-                    TextField("", text:  $contentViewModel.assetTag)
+                    TextField("", text:  $contentViewModel.lookupText)
                     #else
-                    TextField("", text:  $contentViewModel.assetTag)
+                    TextField("", text:  $contentViewModel.lookupText)
                     .padding(.leading, 6.0)
                     #endif
                 }
@@ -61,11 +70,11 @@ struct ContentView: View {
             }
             #if targetEnvironment(macCatalyst)
             NavigationView {
-            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.UpdateNotes)
+            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.updateDevice)
             }.labelsHidden()
             #else
             NavigationView {
-            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.UpdateNotes)
+            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.updateDevice)
             }.navigationViewStyle(StackNavigationViewStyle())
             .labelsHidden()
             #endif

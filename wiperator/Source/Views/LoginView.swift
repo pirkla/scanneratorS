@@ -73,7 +73,7 @@ struct LoginView: View {
 //                    .frame(width: 200.0, height: 200.0)
                 Button(action: {
                     self.loggingIn = true
-                    self.loginViewModel.DeviceSearch() {
+                    self.loginViewModel.deviceSearch() {
                         result in
                         switch result {
                         case .success(let devices):

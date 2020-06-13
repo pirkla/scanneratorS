@@ -10,10 +10,24 @@ import Foundation
 import AVFoundation
 import SwiftUI
 
+
 class ContentViewModel: ObservableObject{
 
     var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
     var searchTask: URLSessionDataTask?
+    @Published var showSheet = true
+    @Published var lookupText: String = "" {
+        willSet(newValue){
+            searchHandler(searchValue: newValue)
+        }
+    }
+    @Published var deviceArray = Array<Device>()
+    
+    var searchIndex = 0 {
+        didSet {
+            searchHandler(searchValue: lookupText)
+        }
+    }
     
     enum ActiveSheet {
        case login, scanner, errorView
@@ -26,29 +40,19 @@ class ContentViewModel: ObservableObject{
         }
     }
     
-    @Published var showSheet = true
-    
-    @Published var errorDescription: String = "Unknown" {
+    private var errorDescription: String = "Unknown" {
         willSet {
             activeSheet = .errorView
         }
     }
     
-    @Published var assetTag: String = "" {
-        willSet(newValue){
-            SearchBetter(searchValue: newValue)
-        }
-    }
-    @Published var deviceArray = Array<Device>()
-        
     var searchModelArray = [ SearchModel(title:"Serial Number", value: "serialnumber"),
                              SearchModel(title:"Asset Tag", value: "assettag")
     ]
-    var searchIndex = 0
     
-    public func DeviceSearch(searchType: String, search: String, completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
+    private func deviceSearch(searchType: String, search: String, completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
         let queryArray = [URLQueryItem(name: searchType,value: search)]
-        return Device.AllDevicesRequest(baseURL: self.credentials.Server, filters: queryArray, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
+        return Device.allDevicesRequest(baseURL: self.credentials.Server, filters: queryArray, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
             (result) in
             switch result {
             case .success(let allDevices):
@@ -60,13 +64,13 @@ class ContentViewModel: ObservableObject{
         }
     }
     
-    public func UpdateNotes(udid: String, notes: String, completion: @escaping (Result<JSResponse,Error>)->Void) {
+    public func updateDevice(udid: String, notes: String, completion: @escaping (Result<JSResponse,Error>)->Void) {
         _ = DeviceUpdateRequest(udid: udid, notes: notes).submitDeviceUpdate(baseUrl: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared){
             (result) in
             switch result {
             case .success(let response):
                 #if targetEnvironment(macCatalyst)
-                self.SearchBetter(searchValue: self.assetTag)
+                self.searchHandler(searchValue: self.lookupText)
                 #endif
                 completion(.success(response))
             case .failure(let error):
@@ -78,9 +82,9 @@ class ContentViewModel: ObservableObject{
         }
     }
     
-    public func SearchBetter(searchValue: String) {
+    private func searchHandler(searchValue: String) {
         searchTask?.cancel()
-        searchTask = DeviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: searchValue){
+        searchTask = deviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: searchValue){
             [weak self]
             (result) in
             switch result {
@@ -96,8 +100,22 @@ class ContentViewModel: ObservableObject{
             }
         }
     }
-        
 
+    func checkCameraAccess(completion: @escaping (Bool)->Void) {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+            case .authorized: 
+                completion(true)
+            default:
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    if granted {
+                        completion(true)
+                    }
+                    else {
+                        completion(false)
+                    }
+                }
+        }
+    }
     
     func currentModal() -> AnyView {
         switch activeSheet {
@@ -116,7 +134,7 @@ class ContentViewModel: ObservableObject{
                 self.showSheet = false
                 switch result {
                 case .success(let code):
-                    self.assetTag = code
+                    self.lookupText = code
                 case .failure(let error):
                     self.errorDescription = error.localizedDescription
                     print(error.localizedDescription)

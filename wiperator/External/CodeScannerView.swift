@@ -145,14 +145,14 @@ public struct CodeScannerView: UIViewControllerRepresentable {
         override public func viewDidLoad() {
             super.viewDidLoad()
 
-            cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
-            cancelButton.backgroundColor = .gray
-            cancelButton.setTitle("Cancel", for: .normal)
-            cancelButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-            self.view.addSubview(cancelButton)
-            self.view.bringSubviewToFront(cancelButton)
-            cancelButton.frame.origin.x = -100
-            
+//            cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 20))
+//            cancelButton.backgroundColor = .gray
+//            cancelButton.setTitle("Cancel", for: .normal)
+//            cancelButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+//            self.view.addSubview(cancelButton)
+//            self.view.bringSubviewToFront(cancelButton)
+//            cancelButton.frame.origin.x = -100
+//            
             
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(updateOrientation),

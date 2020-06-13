@@ -90,7 +90,7 @@ struct DeviceDetailView: View {
       }
     }
     func updateDevice() {
-        Device.DeviceRequest(baseURL: credentials.Server, udid: device.UDID ?? "", credentials: credentials.BasicCreds, session: URLSession.shared){
+        Device.deviceRequest(baseURL: credentials.Server, udid: device.UDID ?? "", credentials: credentials.BasicCreds, session: URLSession.shared){
             result in
             switch result {
             case .success(let deviceResponse):

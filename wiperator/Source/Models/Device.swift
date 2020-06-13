@@ -77,10 +77,8 @@ struct AppEntry {
 
 
 extension Device{
-
     
-    
-    static func DeviceRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
+    static func deviceRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
         let dataTask = session.dataTask(request: request) {
             (result) in
             switch result {
@@ -104,7 +102,7 @@ extension Device{
         return dataTask
     }
     
-    static func DeviceRequest(baseURL: URLComponents,udid: String,credentials: String, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
+    static func deviceRequest(baseURL: URLComponents,udid: String,credentials: String, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
         var urlComponents = baseURL
         urlComponents.path="/api/devices/\(udid)"
         guard let myUrl = urlComponents.url else {
@@ -112,14 +110,14 @@ extension Device{
             return nil
         }
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.get,accept: ContentType.json)
-        let dataTask = DeviceRequest(request: myRequest, session: session){
+        let dataTask = deviceRequest(request: myRequest, session: session){
             (result) in
             completion(result)
         }
         return dataTask
     }
     
-    static func AllDevicesRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
+    static func allDevicesRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
         let dataTask = session.dataTask(request: request) {
             (result) in
             switch result {
@@ -142,7 +140,7 @@ extension Device{
         return dataTask
     }
     
-    static func AllDevicesRequest(baseURL: URLComponents,filters: [URLQueryItem] = [],credentials: String, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
+    static func allDevicesRequest(baseURL: URLComponents,filters: [URLQueryItem] = [],credentials: String, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
         var urlComponents = baseURL
         urlComponents.path="/api/devices"
         urlComponents.queryItems = filters
@@ -151,7 +149,7 @@ extension Device{
             return nil
         }
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.get,accept: ContentType.json)
-        let dataTask = AllDevicesRequest(request: myRequest, session: session){
+        let dataTask = allDevicesRequest(request: myRequest, session: session){
             (result) in
             completion(result)
         }
