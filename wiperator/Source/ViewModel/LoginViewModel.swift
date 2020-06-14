@@ -83,6 +83,7 @@ class LoginViewModel: ObservableObject {
                 DispatchQueue.main.async {
 //                    self.presentationMode.wrappedValue.dismiss()
                     self.loggingIn = false
+                    self.serverError = "itworked?"
                 }
                 do {
                     try self.syncronizeCredentials()

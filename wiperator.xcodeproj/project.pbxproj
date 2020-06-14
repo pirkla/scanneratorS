@@ -11,6 +11,7 @@
 		710DB8DD248351D40064B088 /* CodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 710DB8DC248351D40064B088 /* CodeScannerView.swift */; };
 		711BED03248F1DEE00D15CC9 /* DataTaskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711BED02248F1DEE00D15CC9 /* DataTaskError.swift */; };
 		713F1A50248194CE00E24C40 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713F1A4F248194CE00E24C40 /* SearchModel.swift */; };
+		715E92192495B71600C0E1C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71FD3D55247F241E001CC553 /* Assets.xcassets */; };
 		7186D4A02492E804006249E9 /* ScannerErrorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7186D49F2492E804006249E9 /* ScannerErrorExtension.swift */; };
 		719E6602248481740040ABD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6601248481740040ABD9 /* LoginView.swift */; };
 		719E6604248481ED0040ABD9 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6603248481ED0040ABD9 /* LoginViewModel.swift */; };
@@ -24,7 +25,6 @@
 		71FD3D50247F241C001CC553 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D4F247F241C001CC553 /* AppDelegate.swift */; };
 		71FD3D52247F241C001CC553 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D51247F241C001CC553 /* SceneDelegate.swift */; };
 		71FD3D54247F241C001CC553 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D53247F241C001CC553 /* ContentView.swift */; };
-		71FD3D56247F241E001CC553 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71FD3D55247F241E001CC553 /* Assets.xcassets */; };
 		71FD3D59247F241E001CC553 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71FD3D58247F241E001CC553 /* Preview Assets.xcassets */; };
 		71FD3D5C247F241E001CC553 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71FD3D5A247F241E001CC553 /* LaunchScreen.storyboard */; };
 		71FD3D67247F241E001CC553 /* wiperatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D66247F241E001CC553 /* wiperatorTests.swift */; };
@@ -356,8 +356,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				71FD3D5C247F241E001CC553 /* LaunchScreen.storyboard in Resources */,
+				715E92192495B71600C0E1C0 /* Assets.xcassets in Resources */,
 				71FD3D59247F241E001CC553 /* Preview Assets.xcassets in Resources */,
-				71FD3D56247F241E001CC553 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
