@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:wiperator.xcodeproj">
+      location = "self:/Users/andrew.pirkl/xcodeGits/wiperatorjp/ScanneratorS.xcodeproj">
    </FileRef>
 </Workspace>
