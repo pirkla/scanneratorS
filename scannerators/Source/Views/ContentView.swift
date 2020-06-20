@@ -70,7 +70,7 @@ struct ContentView: View {
             }
             #if targetEnvironment(macCatalyst)
             NavigationView {
-            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.updateDevice)
+            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials)
             }.labelsHidden()
             #else
             NavigationView {

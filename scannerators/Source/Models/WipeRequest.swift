@@ -26,36 +26,26 @@ extension WipeRequest{
         return dataToSubmit
     }
     
-    func submitWipeRequest(baseURL: URLComponents,credentials: String,session: URLSession, completion: @escaping (Result<JSResponse,Error>)->Void){
+    func submitWipeRequest(baseURL: URLComponents,credentials: String,session: URLSession, completion: @escaping (Result<JSResponse,Error>)-> Void )-> URLSessionDataTask? {
         var urlComponents = baseURL
         urlComponents.path="/api/devices/\(self.udid ?? "")/wipe"
         guard let myUrl = urlComponents.url else {
-            return completion(.failure(NSError()))
+            completion(.failure(NSError()))
+            return nil
         }
         
         let jsonData = self.toJSON()
         
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.post, dataToSubmit: jsonData, contentType: ContentType.json, accept: ContentType.json)
         
-        let dataTask = session.dataTask(request: myRequest) {
-            (result) in
+        return session.fetchDecodedResponse(request: myRequest) {
+            (result: Result<JSResponse, Error>) in
             switch result {
             case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let responseObject = try decoder.decode(JSResponse.self, from: data)
-                    print(responseObject)
-                    completion(.success(responseObject))
-                }
-                catch {
-                    print(error)
-                    completion(.failure(error))
-                }
+                completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
-        dataTask.resume()
     }
 }

@@ -37,26 +37,15 @@ extension DeviceUpdateRequest {
             return nil
         }
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.post,dataToSubmit: self.toJSON(), accept: ContentType.json)
-        let dataTask = session.dataTask(request: myRequest) {
-            (result) in
+        
+        return session.fetchDecodedResponse(request: myRequest) {
+            (result: Result<JSResponse, Error>) in
             switch result {
             case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let responseObject = try decoder.decode(JSResponse.self, from: data)
-                    completion(.success(responseObject))
-                }
-                catch {
-                    print(error)
-                    completion(.failure(error))
-                }
+                completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
-        dataTask.resume()
-        return dataTask
     }
-    
 }

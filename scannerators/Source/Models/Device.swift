@@ -28,9 +28,15 @@ struct Device: Codable, Identifiable {
     var apps: [App]?
     var os : OSType?
     var notes: String?
-    var isCheckedIn: Bool {
+    var isCheckedIn: Bool? {
         get {
-            return notes == "Checked In"
+            if notes == "Checked In" {
+                return true
+            }
+            else if notes == "Checked Out" {
+                return false
+            }
+            return nil
         }
     }
     var isiOS: Bool {
@@ -78,30 +84,6 @@ struct AppEntry {
 
 extension Device{
     
-    static func deviceRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
-        let dataTask = session.dataTask(request: request) {
-            (result) in
-            switch result {
-            case .success(let data):
-                print(String(data: data, encoding: .utf8)!)
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let responseObject = try decoder.decode(DeviceResponse.self, from: data)
-                    completion(.success(responseObject))
-                }
-                catch {
-                    print(error)
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-        dataTask.resume()
-        return dataTask
-    }
-    
     static func deviceRequest(baseURL: URLComponents,udid: String,credentials: String, session: URLSession, completion: @escaping (Result<DeviceResponse,Error>)-> Void)-> URLSessionDataTask? {
         var urlComponents = baseURL
         urlComponents.path="/api/devices/\(udid)"
@@ -110,34 +92,15 @@ extension Device{
             return nil
         }
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.get,accept: ContentType.json)
-        let dataTask = deviceRequest(request: myRequest, session: session){
-            (result) in
-            completion(result)
-        }
-        return dataTask
-    }
-    
-    static func allDevicesRequest(request: URLRequest, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
-        let dataTask = session.dataTask(request: request) {
-            (result) in
+        return session.fetchDecodedResponse(request: myRequest) {
+            (result: Result<DeviceResponse, Error>) in
             switch result {
             case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let responseObject = try decoder.decode(AllDevices.self, from: data)
-                    completion(.success(responseObject))
-                }
-                catch {
-                    print(error)
-                    completion(.failure(error))
-                }
+                completion(.success(data))
             case .failure(let error):
                 completion(.failure(error))
             }
         }
-        dataTask.resume()
-        return dataTask
     }
     
     static func allDevicesRequest(baseURL: URLComponents,filters: [URLQueryItem] = [],credentials: String, session: URLSession, completion: @escaping (Result<AllDevices,Error>)-> Void)-> URLSessionDataTask? {
@@ -149,11 +112,15 @@ extension Device{
             return nil
         }
         let myRequest = URLRequest(url: myUrl,basicCredentials:credentials, method: HTTPMethod.get,accept: ContentType.json)
-        let dataTask = allDevicesRequest(request: myRequest, session: session){
-            (result) in
-            completion(result)
+        return session.fetchDecodedResponse(request: myRequest) {
+            (result: Result<AllDevices, Error>) in
+            switch result {
+            case .success(let data):
+                completion(.success(data))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
-        return dataTask
     }
 }
 

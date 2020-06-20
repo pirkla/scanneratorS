@@ -18,6 +18,7 @@
 		719E6606248485D50040ABD9 /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 719E6605248485D50040ABD9 /* Credentials.swift */; };
 		71E1C277247F6BFE00113824 /* InfoSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C276247F6BFE00113824 /* InfoSheetView.swift */; };
 		71E1C279247F6E6A00113824 /* OptionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C278247F6E6A00113824 /* OptionSheet.swift */; };
+		71F6785F249D7AAC00B0389E /* DeviceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F6785E249D7AAC00B0389E /* DeviceDetailViewModel.swift */; };
 		71F7058A248DC03B0089387E /* WipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F70589248DC03B0089387E /* WipeRequest.swift */; };
 		71F7058C248DC07A0089387E /* DeviceUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F7058B248DC07A0089387E /* DeviceUpdateRequest.swift */; };
 		71F7058E248DC0D30089387E /* JSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F7058D248DC0D30089387E /* JSResponse.swift */; };
@@ -67,6 +68,7 @@
 		719E6605248485D50040ABD9 /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
 		71E1C276247F6BFE00113824 /* InfoSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoSheetView.swift; sourceTree = "<group>"; };
 		71E1C278247F6E6A00113824 /* OptionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSheet.swift; sourceTree = "<group>"; };
+		71F6785E249D7AAC00B0389E /* DeviceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetailViewModel.swift; sourceTree = "<group>"; };
 		71F70589248DC03B0089387E /* WipeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WipeRequest.swift; sourceTree = "<group>"; };
 		71F7058B248DC07A0089387E /* DeviceUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceUpdateRequest.swift; sourceTree = "<group>"; };
 		71F7058D248DC0D30089387E /* JSResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSResponse.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 			children = (
 				71FD3D92247F46A7001CC553 /* ContentViewModel.swift */,
 				719E6603248481ED0040ABD9 /* LoginViewModel.swift */,
+				71F6785E249D7AAC00B0389E /* DeviceDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				719E6604248481ED0040ABD9 /* LoginViewModel.swift in Sources */,
 				71FD3D85247F2461001CC553 /* URLRequestExtension.swift in Sources */,
 				71FD3D90247F465F001CC553 /* URLBuilder.swift in Sources */,
+				71F6785F249D7AAC00B0389E /* DeviceDetailViewModel.swift in Sources */,
 				719E6602248481740040ABD9 /* LoginView.swift in Sources */,
 				71FD3D52247F241C001CC553 /* SceneDelegate.swift in Sources */,
 				719E6606248485D50040ABD9 /* Credentials.swift in Sources */,
@@ -576,7 +580,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"wiperator/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 5B77FF9LPA;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -604,7 +608,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"wiperator/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 5B77FF9LPA;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
