@@ -11,10 +11,12 @@ import SwiftUI
 struct DeviceListView: View {
     var deviceArray: [Device]
     var credentials: Credentials
+    var setIsLoading: (Bool) -> Void
+    var setErrorDescription: (String) -> Void
 
     var body: some View {
             List(deviceArray) { device in
-                NavigationLink(destination: DeviceDetailView(deviceDetailViewModel: DeviceDetailViewModel(device: device, credentials: self.credentials)))
+                NavigationLink(destination: DeviceDetailView(deviceDetailViewModel: DeviceDetailViewModel(device: device, credentials: self.credentials, setIsLoading: self.setIsLoading, setErrorDescription: self.setErrorDescription)))
                 {
                 DeviceRow(device: device, credentials: self.credentials)
                 }
@@ -22,11 +24,11 @@ struct DeviceListView: View {
     }
 }
 
-struct DeviceListView_Previews: PreviewProvider {
-    static var previews: some View {
-        DeviceListView(deviceArray: [Device](), credentials: Credentials(Username: "", Password: "", Server: URLComponents()))
-    }
-}
+//struct DeviceListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DeviceListView(deviceArray: [Device](), credentials: Credentials(Username: "", Password: "", Server: URLComponents()))
+//    }
+//}
 
 
 struct DeviceRow: View {

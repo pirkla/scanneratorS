@@ -9,8 +9,6 @@
 import SwiftUI
 
 struct LoginView: View {
-//    @State private var serverError = ""
-//    @State private var loggingIn = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var loginViewModel = LoginViewModel()
     var completion: (Credentials,[Device]) -> Void
@@ -23,38 +21,41 @@ struct LoginView: View {
             HStack(){
                 Text("URL")
                     .multilineTextAlignment(.leading)
-                    .frame(width: 85, alignment: .trailing)
+                    .frame(width: 90, alignment: .trailing)
                 HStack {
                 TextField("https://sample.jamfcloud.com", text: $loginViewModel.enteredURL)
                     .textContentType(.URL)
                     .disableAutocorrection(true)
+                    .autocapitalization(.none)
                 }
                 .padding(.horizontal, 7.0)
-                .frame(idealWidth: 150.0 ,maxWidth: 350)
+                .frame(idealWidth: 150.0 ,maxWidth: 350,idealHeight: 25,maxHeight: 25)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
             HStack() {
                 Text("Network ID")
-                    .frame(width: 85, alignment: .trailing)
+                    .frame(width: 90, alignment: .trailing)
                 HStack {
                     TextField("", text: $loginViewModel.networkID)
                     .disableAutocorrection(true)
+                    .autocapitalization(.none)
+
                 }
                 .padding(.horizontal, 7.0)
-                .frame(idealWidth: 150.0 ,maxWidth: 350)
+                .frame(idealWidth: 150.0 ,maxWidth: 350,idealHeight: 25,maxHeight: 25)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
             HStack() {
                 Text("API Key")
                     .multilineTextAlignment(.leading)
-                    .frame(width: 85, alignment: .trailing)
+                    .frame(width: 90, alignment: .trailing)
                 HStack {
                 SecureField("", text:  $loginViewModel.apiKey)
                 }
                 .padding(.horizontal, 7.0)
-                .frame(idealWidth: 150.0 ,maxWidth: 350)
+                .frame(idealWidth: 150.0 ,maxWidth: 350,idealHeight: 25,maxHeight: 25)
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
@@ -86,6 +87,7 @@ struct LoginView: View {
                 .fixedSize()
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
+                .shadow(color:.black, radius: 3,x: 1, y: 1)
 
             }
             HStack {
@@ -93,20 +95,11 @@ struct LoginView: View {
                     .padding(.all, 10.0)
                     .multilineTextAlignment(.center)
             }
-
+            Spacer().frame(height:100)
         }
         .disabled(self.loginViewModel.loggingIn)
         .onAppear {
             self.loginViewModel.loadCredentials()
-            if self.loginViewModel.readConfig() {
-                self.loginViewModel.login() {
-                    (credentials, devices) in
-                    self.completion(credentials, devices)
-                    DispatchQueue.main.async {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-                }
-            }
         }
     }
 }

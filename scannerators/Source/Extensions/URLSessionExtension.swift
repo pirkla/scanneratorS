@@ -38,6 +38,13 @@ extension URLSession {
     
     func fetchDecodedResponse<T: Decodable>(request: URLRequest, completion: @escaping (Result<T,Error>)-> Void) -> URLSessionDataTask
     {
+        let dataTask = fetchDecodedResponseNoResume(request: request, completion: completion)
+        dataTask.resume()
+        return dataTask
+    }
+    
+    func fetchDecodedResponseNoResume<T: Decodable>(request: URLRequest, completion: @escaping (Result<T,Error>)-> Void) -> URLSessionDataTask
+    {
         let dataTask = self.dataTask(request: request) {
             (result) in
             switch result {
@@ -57,7 +64,6 @@ extension URLSession {
                 completion(.failure(error))
             }
         }
-        dataTask.resume()
         return dataTask
     }
 }

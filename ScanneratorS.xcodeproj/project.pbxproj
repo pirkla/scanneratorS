@@ -19,6 +19,7 @@
 		71E1C277247F6BFE00113824 /* InfoSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C276247F6BFE00113824 /* InfoSheetView.swift */; };
 		71E1C279247F6E6A00113824 /* OptionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1C278247F6E6A00113824 /* OptionSheet.swift */; };
 		71F6785F249D7AAC00B0389E /* DeviceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F6785E249D7AAC00B0389E /* DeviceDetailViewModel.swift */; };
+		71F67860249DA8D100B0389E /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7186D4A124932F44006249E9 /* LogoView.swift */; };
 		71F7058A248DC03B0089387E /* WipeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F70589248DC03B0089387E /* WipeRequest.swift */; };
 		71F7058C248DC07A0089387E /* DeviceUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F7058B248DC07A0089387E /* DeviceUpdateRequest.swift */; };
 		71F7058E248DC0D30089387E /* JSResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F7058D248DC0D30089387E /* JSResponse.swift */; };
@@ -396,6 +397,7 @@
 				71FD3D50247F241C001CC553 /* AppDelegate.swift in Sources */,
 				71F7058E248DC0D30089387E /* JSResponse.swift in Sources */,
 				71FD3D88247F246B001CC553 /* Device.swift in Sources */,
+				71F67860249DA8D100B0389E /* LogoView.swift in Sources */,
 				71E1C279247F6E6A00113824 /* OptionSheet.swift in Sources */,
 				71FD3D84247F2461001CC553 /* StringExtension.swift in Sources */,
 				719E6604248481ED0040ABD9 /* LoginViewModel.swift in Sources */,

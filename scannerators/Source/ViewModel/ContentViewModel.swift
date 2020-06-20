@@ -12,20 +12,42 @@ import SwiftUI
 
 
 class ContentViewModel: ObservableObject{
-
+    private var maxDevices = 100
+    
     var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
-    var searchTask: URLSessionDataTask?
+    
+    
+    var searchTask: [URLSessionDataTask]?
     @Published var showSheet = true
-    @Published var lookupText: String = "" {
-        willSet(newValue){
-            searchHandler(searchValue: newValue)
+    
+    @Published var isLoading = false
+    
+    private var typing: Int = 0 {
+        willSet(newValue) {
+            if newValue == 0 {
+                searchHandler(searchValue: lookupText)
+            }
         }
     }
-    @Published var deviceArray = Array<Device>()
     
-    var searchIndex = 0 {
-        didSet {
-            searchHandler(searchValue: lookupText)
+    @Published var lookupText: String = "" {
+        willSet {
+            self.typing += 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                self.typing -= 1
+            }
+        }
+    }
+
+    @Published private(set) var projectedDeviceArray = Array<Device>()
+    private(set) var wrappedDeviceArray: Array<Device> {
+        get {
+            return projectedDeviceArray
+        }
+        set(newValue) {
+            DispatchQueue.main.async {
+                self.projectedDeviceArray = (newValue.count > self.maxDevices) ? Array(newValue.dropLast(newValue.count - self.maxDevices)) : newValue
+            }
         }
     }
     
@@ -46,13 +68,41 @@ class ContentViewModel: ObservableObject{
         }
     }
     
-    var searchModelArray = [ SearchModel(title:"Serial Number", value: "serialnumber"),
-                             SearchModel(title:"Asset Tag", value: "assettag")
-    ]
     
-    private func deviceSearch(searchType: String, search: String, completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
-        let queryArray = [URLQueryItem(name: searchType,value: search)]
-        return Device.allDevicesRequest(baseURL: self.credentials.Server, filters: queryArray, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
+    init(credentials: Credentials?) {
+        guard let myCredentials = credentials else {
+            self.showSheet = true
+            return
+        }
+        self.credentials = myCredentials
+        self.showSheet = false
+        _ = deviceSearch() {
+            [weak self]
+            (result) in
+            switch result {
+            case .success(let allDevices):
+                self?.wrappedDeviceArray = allDevices
+            case .failure(let error):
+                self?.errorDescription = error.localizedDescription
+                print(error)
+            }
+        }
+    }
+    
+    func setErrorDescription(_ description: String){
+        DispatchQueue.main.async {
+            self.errorDescription = description
+        }
+    }
+    
+    func setIsLoading(_ isLoading: Bool){
+        DispatchQueue.main.async {
+            self.isLoading = isLoading
+        }
+    }
+    
+    public func deviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
+        let dataTask = Device.allDevicesRequest(baseURL: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared) {
             (result) in
             switch result {
             case .success(let allDevices):
@@ -62,39 +112,25 @@ class ContentViewModel: ObservableObject{
                 print(error)
             }
         }
+        dataTask?.resume()
+        return dataTask
     }
-    
-    public func updateDevice(udid: String, notes: String, completion: @escaping (Result<JSResponse,Error>)->Void) {
-        _ = DeviceUpdateRequest(udid: udid, notes: notes).submitDeviceUpdate(baseUrl: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared){
-            (result) in
-            switch result {
-            case .success(let response):
-                #if targetEnvironment(macCatalyst)
-                self.searchHandler(searchValue: self.lookupText)
-                #endif
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-                print(error)
-                //todo: handle non-200 response in jssresponse (maybe up the line a step) - why is that even a thing?
-                self.errorDescription = error.localizedDescription
-            }
-        }
-    }
-    
+        
     private func searchHandler(searchValue: String) {
-        searchTask?.cancel()
-        searchTask = deviceSearch(searchType: self.searchModelArray[self.searchIndex].value, search: searchValue){
+        searchTask?.forEach { $0.cancel() }
+        setIsLoading(true)
+        _ = Device.broadSearchRequest(baseURL: credentials.Server, searchValue: searchValue, credentials: credentials.BasicCreds, session: URLSession.shared) {
             [weak self]
-            (result) in
+            result in
+            self?.setIsLoading(false)
             switch result {
             case .success(let devices):
                 DispatchQueue.main.async {
-                    self?.deviceArray = devices
+                    self?.wrappedDeviceArray = devices
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self?.deviceArray = Array<Device>()
+                    self?.wrappedDeviceArray = Array<Device>()
                     print(error)
                 }
             }
@@ -124,7 +160,7 @@ class ContentViewModel: ObservableObject{
                 (credentials,devices) in
                 self.credentials = credentials
                 DispatchQueue.main.async {
-                    self.deviceArray = devices
+                    self.wrappedDeviceArray = devices
                 }
             })
         

@@ -29,6 +29,7 @@ class LoginViewModel: ObservableObject {
     @Published var saveCredentials = true
 
     func loadCredentials() {
+        saveCredentials = UserDefaults.standard.bool(forKey: "shouldSaveCredentials")
         enteredURL = UserDefaults.standard.string(forKey: "jamfSchoolServer") ?? enteredURL
         do {
             let credentials = try Credentials.loadCredentials(server: enteredURL)
@@ -41,6 +42,7 @@ class LoginViewModel: ObservableObject {
     }
     
     func syncronizeCredentials() throws{
+        UserDefaults.standard.set(saveCredentials, forKey: "shouldSaveCredentials")
         if saveCredentials {
             UserDefaults.standard.set(enteredURL, forKey: "jamfSchoolServer")
             do {
@@ -58,7 +60,7 @@ class LoginViewModel: ObservableObject {
     }
     
     public func deviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
-        return Device.allDevicesRequest(baseURL: baseURL, credentials: credentials.BasicCreds, session: URLSession.shared) {(result) in
+        let dataTask = Device.allDevicesRequest(baseURL: baseURL, credentials: credentials.BasicCreds, session: URLSession.shared) {(result) in
             switch result {
             case .success(let allDevices):
                 completion(.success(allDevices.devices))
@@ -67,11 +69,13 @@ class LoginViewModel: ObservableObject {
                 print(error)
             }
         }
+        dataTask?.resume()
+        return dataTask
     }
     
     public func login(completion: @escaping (Credentials,[Device])->Void) {
         loggingIn = true
-        deviceSearch() {
+        _ = deviceSearch() {
             [weak self]
             result in
             guard let self = self else {
@@ -99,38 +103,5 @@ class LoginViewModel: ObservableObject {
                 }
             }
         }
-    }
-    
-    
-    public func readConfig() -> Bool{
-        if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
-            guard let myServerURL = managedConf["serverURL"] as? String else {
-                return false
-            }
-            self.enteredURL = myServerURL
-            guard let myNetworkID = managedConf["networkID"] as? String else {
-                return false
-            }
-            self.networkID = myNetworkID
-            guard let myApiKey = managedConf["apiKey"] as? String else {
-                return false
-            }
-            self.apiKey = myApiKey
-            return true
-            
-        }
-        guard let myServerURL = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String else {
-            return false
-        }
-        self.enteredURL = myServerURL
-        guard let myNetworkID = Bundle.main.object(forInfoDictionaryKey: "networkID") as? String else {
-            return false
-        }
-        self.networkID = myNetworkID
-        guard let myApiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String else {
-            return false
-        }
-        self.apiKey = myApiKey
-        return true
     }
 }

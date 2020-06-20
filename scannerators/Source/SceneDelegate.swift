@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
+        let contentView = ContentView(contentViewModel: ContentViewModel(credentials: readConfig()))
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -59,6 +59,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    public func readConfig() -> Credentials?{
+        if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
 
+            guard let urlString = managedConf["serverURL"] as? String else {
+                return nil
+            }
+            let serverUrl = URLBuilder.BuildURL(baseURL: urlString)
+
+            guard let networkId = managedConf["username"] as? String else {
+                return nil
+            }
+            guard let apiKey = managedConf["password"] as? String else {
+                return nil
+            }
+            return Credentials(Username: networkId, Password: apiKey, Server: serverUrl)
+
+        }
+        guard let urlString = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String else {
+            return nil
+        }
+        let serverUrl = URLBuilder.BuildURL(baseURL: urlString)
+
+        guard let networkId = Bundle.main.object(forInfoDictionaryKey: "username") as? String else {
+            return nil
+        }
+
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "password") as? String else {
+            return nil
+        }
+        return Credentials(Username: networkId, Password: apiKey, Server: serverUrl)
+    }
 }
 

@@ -9,33 +9,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var contentViewModel = ContentViewModel()
+    @ObservedObject var contentViewModel: ContentViewModel
     
     var body: some View {
         VStack() {
             HStack() {
+                Spacer()
                 Button(action: {
                     self.contentViewModel.activeSheet = .login
                 }) {
                     Text("Login")
-                }
+                }.padding(.leading, 20.0).frame(width: 70, height: 80, alignment: .leading)
+                
+                LogoView(animate: $contentViewModel.isLoading).frame(width: 80, height: 80)
             }
-            .padding(.bottom, 20.0)
-            HStack() {
-                Picker(selection: $contentViewModel.searchIndex, label: EmptyView()) {
-                ForEach(0 ..< contentViewModel.searchModelArray.count) {
-                    index in
-                    HStack() {
-                    Text(self.contentViewModel.searchModelArray[index].title)
-                        .tag(index)
-                    }
-                    }
-                }
-            }
-            .padding(.bottom, 50.0)
-            .frame(width: 300.0, height: 80.0)
-            .zIndex(-2)
-            
+
             
             HStack() {
                 Text("Search")
@@ -59,9 +47,12 @@ struct ContentView: View {
                             .frame(width: 30, height:30)
                     }
                     TextField("", text:  $contentViewModel.lookupText)
+                    .autocapitalization(.none)
+
                     #else
                     TextField("", text:  $contentViewModel.lookupText)
                     .padding(.leading, 6.0)
+                    .autocapitalization(.none)
                     #endif
                 }
                 .frame(idealWidth: 250.0,maxWidth: 350)
@@ -70,11 +61,11 @@ struct ContentView: View {
             }
             #if targetEnvironment(macCatalyst)
             NavigationView {
-            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials)
+                DeviceListView(deviceArray: self.contentViewModel.projectedDeviceArray, credentials: self.contentViewModel.credentials,setIsLoading: contentViewModel.setIsLoading(_:), setErrorDescription: contentViewModel.setErrorDescription(_:))
             }.labelsHidden()
             #else
             NavigationView {
-            DeviceListView(deviceArray: self.contentViewModel.deviceArray, credentials: self.contentViewModel.credentials, updateFunc: self.contentViewModel.updateDevice)
+                DeviceListView(deviceArray: self.contentViewModel.projectedDeviceArray, credentials: self.contentViewModel.credentials,setIsLoading: contentViewModel.setIsLoading(_:), setErrorDescription: contentViewModel.setErrorDescription(_:))
             }.navigationViewStyle(StackNavigationViewStyle())
             .labelsHidden()
             #endif
@@ -89,6 +80,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(contentViewModel: ContentViewModel(credentials: nil))
     }
 }
