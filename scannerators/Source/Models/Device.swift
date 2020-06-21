@@ -28,6 +28,18 @@ struct Device: Codable, Identifiable {
     var apps: [App]?
     var os : OSType?
     var notes: String?
+    var owner: Owner?
+    
+    var username: String? {
+        return owner?.username
+    }
+    var fullname: String? {
+        guard let owner = owner else {
+            return nil
+        }
+        return "\(owner.firstName ?? "") \(owner.lastName ?? "")"
+    }
+    
     var isCheckedIn: Bool? {
         get {
             if notes == "Checked In" {
@@ -55,6 +67,7 @@ struct Device: Codable, Identifiable {
         case apps
         case os
         case notes
+        case owner
     }
 }
 struct DeviceModel: Codable {
@@ -79,6 +92,18 @@ struct AppEntry {
     var name:String=""
     var version:String=""
     var deviceType:String=""
+}
+
+struct Owner: Codable {
+    var id: Int?
+    var locationId: Int?
+    var inTrash: Bool?
+    var deviceCount: Int?
+    var username: String?
+    var email: String?
+    var firstName: String?
+    var lastName: String?
+    var notes: String?
 }
 
 extension Device: Hashable {
