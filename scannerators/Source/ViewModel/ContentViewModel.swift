@@ -17,7 +17,6 @@ class ContentViewModel: ObservableObject{
     var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
     
     
-    var searchTask: [URLSessionDataTask]?
     @Published var showSheet = true
     
     @Published var isLoading = false
@@ -50,6 +49,9 @@ class ContentViewModel: ObservableObject{
             }
         }
     }
+    var fullDeviceList = Array<Device>()
+    
+    var lastDeviceCheck = Date()
     
     enum ActiveSheet {
        case login, scanner, errorView
@@ -115,31 +117,52 @@ class ContentViewModel: ObservableObject{
         dataTask?.resume()
         return dataTask
     }
+    
+    private func deviceFilter(searchValue: String){
+        guard (DateInterval(start: lastDeviceCheck, end: Date()).duration > 100) else {
+            guard (searchValue.count > 0) else {
+                self.wrappedDeviceArray = fullDeviceList
+                return
+            }
+            let filteredArray = fullDeviceList.filter {
+                device in
+                ((device.fullname?.contains(searchValue) ?? false) ||
+                    ((device.name?.contains(searchValue)) ?? false) ||
+                    ((device.assetTag?.contains(searchValue)) ?? false) ||
+                    ((device.serialNumber?.contains(searchValue)) ?? false)
+                )
+            }
+            self.wrappedDeviceArray = filteredArray
+            return
+        }
+    }
         
     private func searchHandler(searchValue: String) {
-        searchTask?.forEach { $0.cancel() }
+        guard (DateInterval(start: lastDeviceCheck, end: Date()).duration > 10) else {
+            deviceFilter(searchValue: searchValue)
+            return
+        }
         setIsLoading(true)
-        _ = Device.broadSearchRequest(baseURL: credentials.Server, searchValue: searchValue, credentials: credentials.BasicCreds, session: URLSession.shared) {
+        _ = Device.allDevicesRequest(baseURL: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared) {
             [weak self]
-            result in
+            (result) in
             self?.setIsLoading(false)
             switch result {
-            case .success(let devices):
-                DispatchQueue.main.async {
-                    self?.wrappedDeviceArray = devices
-                }
+            case .success(let allDevices):
+                self?.lastDeviceCheck = Date()
+                self?.fullDeviceList = allDevices.devices
+                self?.deviceFilter(searchValue: searchValue)
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.wrappedDeviceArray = Array<Device>()
-                    print(error)
-                }
+                self?.errorDescription = error.localizedDescription
+                print(error)
             }
         }
+        
     }
 
     func checkCameraAccess(completion: @escaping (Bool)->Void) {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
-            case .authorized: 
+            case .authorized:
                 completion(true)
             default:
                 AVCaptureDevice.requestAccess(for: .video) { granted in
@@ -160,6 +183,7 @@ class ContentViewModel: ObservableObject{
                 (credentials,devices) in
                 self.credentials = credentials
                 DispatchQueue.main.async {
+                    self.fullDeviceList = devices
                     self.wrappedDeviceArray = devices
                 }
             })

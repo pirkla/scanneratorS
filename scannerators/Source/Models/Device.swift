@@ -181,69 +181,6 @@ extension Device{
             }
         }
     }
-    
-    
-    static func broadSearchRequest(baseURL: URLComponents, searchValue: String, credentials: String, session: URLSession, completion: @escaping (Result<[Device],Error>)-> Void)-> [URLSessionDataTask?] {
-        var urlSessionDataTaskArray = [URLSessionDataTask?]()
-        var devicesArray = [Device]()
-//        let deviceSet = Set<Device>()
-        
-        var urlComponents = baseURL
-        urlComponents.path="/api/devices"
-        
-        let nameQuery = [URLQueryItem(name: "name",value: searchValue)]
-        let snQuery = [URLQueryItem(name: "serialnumber",value: searchValue)]
-        let assetQuery = [URLQueryItem(name: "assettag",value: searchValue)]
-            
-        let group = DispatchGroup()
-        
-        group.enter()
-        urlSessionDataTaskArray.append(allDevicesRequest(baseURL: baseURL, filters: nameQuery, credentials: credentials, session: session) {
-            (result: Result<AllDevices, Error>) in
-            switch result {
-            case .success(let data):
-                devicesArray.append(contentsOf: data.devices)
-            case .failure(let error):
-                print(error)
-                completion(.failure(error))
-            }
-            group.leave()
-        })
-        
-        group.enter()
-        urlSessionDataTaskArray.append(allDevicesRequest(baseURL: baseURL, filters: snQuery, credentials: credentials, session: session) {
-            (result: Result<AllDevices, Error>) in
-            switch result {
-            case .success(let data):
-                devicesArray.append(contentsOf: data.devices)
-            case .failure(let error):
-                print(error)
-                completion(.failure(error))
-            }
-            group.leave()
-        })
-        
-        group.enter()
-        urlSessionDataTaskArray.append(allDevicesRequest(baseURL: baseURL, filters: assetQuery, credentials: credentials, session: session) {
-            (result: Result<AllDevices, Error>) in
-            switch result {
-            case .success(let data):
-                devicesArray.append(contentsOf: data.devices)
-            case .failure(let error):
-                print(error)
-                completion(.failure(error))
-            }
-            group.leave()
-        })
-        
-        DispatchQueue.global().async {
-            group.wait()
-            let deviceSet = Set(devicesArray)
-            completion(.success(Array(deviceSet)))
-        }
-        
-        return urlSessionDataTaskArray
-    }
 }
 
 
