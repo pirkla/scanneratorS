@@ -73,7 +73,7 @@ class ContentViewModel: ObservableObject{
     
     init(credentials: Credentials?) {
         guard let myCredentials = credentials else {
-            self.showSheet = true
+            self.activeSheet = .login            
             return
         }
         self.credentials = myCredentials
@@ -126,10 +126,10 @@ class ContentViewModel: ObservableObject{
             }
             let filteredArray = fullDeviceList.filter {
                 device in
-                ((device.fullname?.contains(searchValue) ?? false) ||
-                    ((device.name?.contains(searchValue)) ?? false) ||
-                    ((device.assetTag?.contains(searchValue)) ?? false) ||
-                    ((device.serialNumber?.contains(searchValue)) ?? false)
+                ((device.fullname?.range(of: searchValue, options: .caseInsensitive) != nil) ||
+                    (device.name?.range(of: searchValue, options: .caseInsensitive) != nil) ||
+                    (device.assetTag?.range(of: searchValue, options: .caseInsensitive) != nil) ||
+                    (device.serialNumber?.range(of: searchValue, options: .caseInsensitive) != nil)
                 )
             }
             self.wrappedDeviceArray = filteredArray

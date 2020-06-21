@@ -70,8 +70,6 @@ struct LoginView: View {
             .frame(width: 350.0, height: 22.0)
             Spacer().frame(height:30)
             HStack(alignment:.top) {
-//                LogoView().scaleEffect(1)
-//                    .frame(width: 200.0, height: 200.0)
                 Button(action: {
                     self.loginViewModel.login() {
                         (credentials, devices) in
