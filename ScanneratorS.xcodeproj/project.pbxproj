@@ -174,7 +174,6 @@
 				71FD3D5A247F241E001CC553 /* LaunchScreen.storyboard */,
 				71FD3D5D247F241E001CC553 /* Info.plist */,
 				71FD3D57247F241E001CC553 /* Preview Content */,
-				71FD3D8F247F465F001CC553 /* URLBuilder.swift */,
 			);
 			path = scannerators;
 			sourceTree = "<group>";
@@ -220,6 +219,7 @@
 		71FD3D86247F246B001CC553 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				71FD3D8F247F465F001CC553 /* URLBuilder.swift */,
 				710DB8D62482E6260064B088 /* KeychainError.swift */,
 				71FD3D87247F246B001CC553 /* Device.swift */,
 				713F1A4F248194CE00E24C40 /* SearchModel.swift */,
