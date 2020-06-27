@@ -76,7 +76,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let apiKey = managedConf["apiKey"] as? String else {
                 return nil
             }
-            return Credentials(Username: networkId, Password: apiKey, Server: serverUrl)
+            return Credentials(username: networkId, password: apiKey, server: serverUrl)
 
         }
         guard let urlString = Bundle.main.object(forInfoDictionaryKey: "serverURL") as? String else {
@@ -91,7 +91,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String else {
             return nil
         }
-        return Credentials(Username: networkId, Password: apiKey, Server: serverUrl)
+        return Credentials(username: networkId, password: apiKey, server: serverUrl)
     }
 }
 

@@ -22,7 +22,7 @@ class LoginViewModel: ObservableObject {
     
     var credentials: Credentials {
         get {
-            return Credentials(Username: networkID, Password: apiKey, Server: baseURL)
+            return Credentials(username: networkID, password: apiKey, server: baseURL)
         }
     }
     
@@ -60,7 +60,7 @@ class LoginViewModel: ObservableObject {
     }
     
     public func deviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
-        let dataTask = Device.allDevicesRequest(baseURL: baseURL, credentials: credentials.BasicCreds, session: URLSession.shared) {(result) in
+        let dataTask = Device.allDevicesRequest(baseURL: baseURL, credentials: credentials.basicCreds, session: URLSession.shared) {(result) in
             switch result {
             case .success(let allDevices):
                 completion(.success(allDevices.devices))

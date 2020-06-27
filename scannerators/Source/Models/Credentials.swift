@@ -9,12 +9,12 @@
 import Foundation
 
 struct Credentials {
-    var Username: String
-    var Password: String
-    var Server: URLComponents
-    var BasicCreds : String {
+    var username: String
+    var password: String
+    var server: URLComponents
+    var basicCreds : String {
         get {
-            return String("\(Username):\(Password)").toBase64()
+            return String("\(username):\(password)").toBase64()
         }
     }
 }

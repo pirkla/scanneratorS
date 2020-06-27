@@ -27,7 +27,7 @@ class DeviceDetailViewModel: ObservableObject {
     // update current device - used when checkin is changed
     func updateDevice() {
         setIsLoading(true)
-        _ = Device.deviceRequest(baseURL: credentials.Server, udid: device.UDID ?? "", credentials: credentials.BasicCreds, session: URLSession.shared){
+        _ = Device.deviceRequest(baseURL: credentials.server, udid: device.UDID ?? "", credentials: credentials.basicCreds, session: URLSession.shared){
             result in
             self.setIsLoading(false)
             switch result {
@@ -44,7 +44,7 @@ class DeviceDetailViewModel: ObservableObject {
     
     func wipeDevice() {
         setIsLoading(true)
-        _ = WipeRequest(udid: self.device.UDID, clearActivationLock: "true").submitWipeRequest(baseURL: self.credentials.Server, credentials: self.credentials.BasicCreds, session: URLSession.shared) {
+        _ = WipeRequest(udid: self.device.UDID, clearActivationLock: "true").submitWipeRequest(baseURL: self.credentials.server, credentials: self.credentials.basicCreds, session: URLSession.shared) {
             result in
             self.setIsLoading(false)
             switch result {
@@ -86,7 +86,7 @@ class DeviceDetailViewModel: ObservableObject {
     
     public func updateNotes(notes: String) {
         setIsLoading(true)
-        _ = DeviceUpdateRequest(udid: self.device.UDID, notes: notes).submitDeviceUpdate(baseUrl: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared){
+        _ = DeviceUpdateRequest(udid: self.device.UDID, notes: notes).submitDeviceUpdate(baseUrl: credentials.server, credentials: credentials.basicCreds, session: URLSession.shared){
             [weak self]
             (result) in
             guard let self = self else {
@@ -187,7 +187,7 @@ class DeviceDetailViewModel: ObservableObject {
     //calculate the url for use with the device name button
     func deviceUrl() -> URL? {
         guard let udid = device.UDID else { return nil }
-        var urlComponents = credentials.Server
+        var urlComponents = credentials.server
         urlComponents.path = "/devices/details/\(udid)/device-list.html"
         return urlComponents.url
     }

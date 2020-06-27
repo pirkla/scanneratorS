@@ -15,10 +15,10 @@ class ContentViewModel: ObservableObject{
     // set the number of devices that can show in the navigation list view - if hundreds/thousands are returned rendering the list is problematic
     private var maxDevices = 100
     
-    var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
+    var credentials: Credentials = Credentials(username: "", password: "", server: URLComponents())
     
     // publish if sheet modal should show - used to show login & error description sheets
-    @Published private(set) var showSheet = true
+    @Published var showSheet = true
     
     // publish if an http request is taking place - used to control the loading icon
     @Published var isLoading = false
@@ -121,7 +121,7 @@ class ContentViewModel: ObservableObject{
      Request all devices from JS
      */
     public func deviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
-        let dataTask = Device.allDevicesRequest(baseURL: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared) {
+        let dataTask = Device.allDevicesRequest(baseURL: credentials.server, credentials: credentials.basicCreds, session: URLSession.shared) {
             (result) in
             switch result {
             case .success(let allDevices):
@@ -166,7 +166,7 @@ class ContentViewModel: ObservableObject{
             return
         }
         setIsLoading(true)
-        _ = Device.allDevicesRequest(baseURL: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared) {
+        _ = Device.allDevicesRequest(baseURL: credentials.server, credentials: credentials.basicCreds, session: URLSession.shared) {
             [weak self]
             (result) in
             self?.setIsLoading(false)
