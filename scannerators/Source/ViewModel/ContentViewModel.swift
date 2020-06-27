@@ -12,15 +12,19 @@ import SwiftUI
 
 
 class ContentViewModel: ObservableObject{
+    // set the number of devices that can show in the navigation list view - if hundreds/thousands are returned rendering the list is problematic
     private var maxDevices = 100
     
     var credentials: Credentials = Credentials(Username: "", Password: "", Server: URLComponents())
     
+    // publish if sheet modal should show - used to show login & error description sheets
+    @Published private(set) var showSheet = true
     
-    @Published var showSheet = true
-    
+    // publish if an http request is taking place - used to control the loading icon
     @Published var isLoading = false
     
+    // typing and lookupText together handle if a lookup sould be made
+    // calculate if the search field is currently being typed in or not. If yes then no then run a search
     private var typing: Int = 0 {
         willSet(newValue) {
             if newValue == 0 {
@@ -28,7 +32,7 @@ class ContentViewModel: ObservableObject{
             }
         }
     }
-    
+    // receive input from lookup bar and incrememnt typing as changed, then after a slight delay decrement
     @Published var lookupText: String = "" {
         willSet {
             self.typing += 1
@@ -38,6 +42,7 @@ class ContentViewModel: ObservableObject{
         }
     }
 
+    // projected and wrapped value used to make deviceArray published but only for a limited number of devices. If the number of devices published is too high rendering is problematic. Calculated with maxDevices
     @Published private(set) var projectedDeviceArray = Array<Device>()
     private(set) var wrappedDeviceArray: Array<Device> {
         get {
@@ -49,13 +54,18 @@ class ContentViewModel: ObservableObject{
             }
         }
     }
+    
+    // used to store the full list of devices since projectedDeviceArray only stores a limited number
     var fullDeviceList = Array<Device>()
     
+    // store time of last request to get all devices so we can make sure we only do it once every x seconds. todo:Could make this prettier
     var lastDeviceCheck = Date()
     
     enum ActiveSheet {
        case login, scanner, errorView
     }
+    
+    // when the active sheet is set set showsheet to true to display newly chosen sheet
     var activeSheet: ActiveSheet = .login {
         willSet {
             DispatchQueue.main.async {
@@ -64,13 +74,14 @@ class ContentViewModel: ObservableObject{
         }
     }
     
+    // when an error description is set set active sheet to show the error view with the new description
     private var errorDescription: String = "Unknown" {
         willSet {
             activeSheet = .errorView
         }
     }
     
-    
+    // if given credentials assume a managed app config was used, don't open the login view, and run a device search
     init(credentials: Credentials?) {
         guard let myCredentials = credentials else {
             self.activeSheet = .login            
@@ -91,18 +102,24 @@ class ContentViewModel: ObservableObject{
         }
     }
     
+    
+    // func to set error description
     func setErrorDescription(_ description: String){
         DispatchQueue.main.async {
             self.errorDescription = description
         }
     }
     
+    // func to set isLoading
     func setIsLoading(_ isLoading: Bool){
         DispatchQueue.main.async {
             self.isLoading = isLoading
         }
     }
     
+    /**
+     Request all devices from JS
+     */
     public func deviceSearch(completion: @escaping (Result<[Device], Error>) -> Void)-> URLSessionDataTask?{
         let dataTask = Device.allDevicesRequest(baseURL: credentials.Server, credentials: credentials.BasicCreds, session: URLSession.shared) {
             (result) in
@@ -118,6 +135,9 @@ class ContentViewModel: ObservableObject{
         return dataTask
     }
     
+    /**
+     Filter all devices by a searchvalue
+     */
     private func deviceFilter(searchValue: String){
         guard (DateInterval(start: lastDeviceCheck, end: Date()).duration > 100) else {
             guard (searchValue.count > 0) else {
@@ -137,6 +157,9 @@ class ContentViewModel: ObservableObject{
         }
     }
         
+    /**
+     Request all devices  and filter them for a search if last check time > 10 seconds, otherwise filter only
+     */
     private func searchHandler(searchValue: String) {
         guard (DateInterval(start: lastDeviceCheck, end: Date()).duration > 10) else {
             deviceFilter(searchValue: searchValue)
@@ -176,6 +199,7 @@ class ContentViewModel: ObservableObject{
         }
     }
     
+    // calculate which modal should be showing when showModal is true
     func currentModal() -> AnyView {
         switch activeSheet {
         case .login:

@@ -14,7 +14,10 @@ struct DeviceDetailView: View {
     
     var body: some View {
       VStack {
+        
+        // Device information group
         VStack {
+            //button to show device name and link to device's details page in JS
             Button(action: {
                 guard let myUrl = self.deviceDetailViewModel.deviceUrl() else {
                     self.deviceDetailViewModel.setErrorDescription("Could not find url")
@@ -31,28 +34,29 @@ struct DeviceDetailView: View {
             .cornerRadius(10)
             .shadow(color:.black, radius: 3,x: 1, y: 1)
 
+            // show serial number
             Text(deviceDetailViewModel.device.serialNumber ?? " ")
                 .font(.headline)
                 .padding(.top, 5)
+            
+            // show asset tag
             Text(deviceDetailViewModel.device.assetTag ?? " ")
                 .padding(.bottom, 15.0)
             
             deviceDetailViewModel.checkinStatusView().padding(.bottom, 20.0)
             
         }
+        // action button group
         HStack() {
+            // calcualte wipe button
             deviceDetailViewModel.wipeView($deviceDetailViewModel.showModal)
                 .shadow(color:.black, radius: 3,x: 1, y: 1)
+            // calculate checkin button
             deviceDetailViewModel.checkedInView()
                 .shadow(color:.black, radius: 3,x: 1, y: 1)
         }
+        // spacer to make information show at the top - it's just prettier that way
         Spacer()
       }
     }
 }
-//
-//struct DeviceDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DeviceDetailView(device: Device(), credentials:Credentials(Username: "", Password: "", Server: URLComponents()), updateFunc: nil)
-//    }
-//}

@@ -7,7 +7,9 @@
 //
 
 import SwiftUI
-
+/**
+Sheet view to display information and provide dismiss button
+ */
 struct InfoSheetView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     

@@ -10,9 +10,7 @@ import Foundation
 import os.log
 
 extension URLSession {
-    /**
-     Run a dataTask escaping a result optionally adding a token provider for just in time authentication
-     */
+
     func dataTask(request: URLRequest, result: @escaping (Result<Data, Error>) -> Void) -> URLSessionDataTask {
         return dataTask(with: request) { (data, response, error) in
             if let error = error {
@@ -36,6 +34,9 @@ extension URLSession {
         }
     }
     
+    /**
+     Create and run a dataTask, escaping a JSON response decoded into given Decodable
+     */
     func fetchDecodedResponse<T: Decodable>(request: URLRequest, completion: @escaping (Result<T,Error>)-> Void) -> URLSessionDataTask
     {
         let dataTask = fetchDecodedResponseNoResume(request: request, completion: completion)

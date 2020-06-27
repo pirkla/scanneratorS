@@ -7,7 +7,9 @@
 //
 
 import SwiftUI
-
+/**
+ Don't even try with this one, it works magically
+ */
 struct LogoView: View {
     
     var animate: Binding<Bool>

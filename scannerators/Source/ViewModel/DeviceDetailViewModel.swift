@@ -24,6 +24,7 @@ class DeviceDetailViewModel: ObservableObject {
         self.setErrorDescription = setErrorDescription
     }
     
+    // update current device - used when checkin is changed
     func updateDevice() {
         setIsLoading(true)
         _ = Device.deviceRequest(baseURL: credentials.Server, udid: device.UDID ?? "", credentials: credentials.BasicCreds, session: URLSession.shared){
@@ -57,6 +58,7 @@ class DeviceDetailViewModel: ObservableObject {
         }
     }
     
+    // calculate which text and image should be shown for checkin status
     func checkinStatusView() -> AnyView{
         var imageString = "questionmark.circle"
         var textString = device.notes ?? "Unkown"
@@ -101,9 +103,15 @@ class DeviceDetailViewModel: ObservableObject {
         }
     }
     
+    // calculate which checkin button should show
     func checkedInView() -> AnyView?{
+        // checkin
         let checkInbutton = Button(action: {
-            self.updateNotes(notes: "Checked In")
+            guard let notes = self.device.notes else {
+                return
+            }
+            let newNote = notes.replacingOccurrences(of: "Checked In", with: "",options: .caseInsensitive).replacingOccurrences(of: "Checked Out", with: "",options: .caseInsensitive) + "Checked In"
+            self.updateNotes(notes: newNote)
         }) {
             HStack {
                 Image(systemName: "rectangle.badge.checkmark")
@@ -114,9 +122,15 @@ class DeviceDetailViewModel: ObservableObject {
             .background(Color.init("TextBackground"))
         }
         .cornerRadius(10)
-
+        
+        //checkout
         let checkOutButton = Button(action: {
-            self.updateNotes(notes: "Checked Out")
+            guard let notes = self.device.notes else {
+                return
+            }
+            let newNote = notes.replacingOccurrences(of: "Checked In", with: "",options: .caseInsensitive).replacingOccurrences(of: "Checked Out", with: "",options: .caseInsensitive) + "Checked Out"
+            self.updateNotes(notes: newNote)
+            
         }) {
             HStack {
                 Image(systemName: "rectangle.badge.xmark")
@@ -135,6 +149,7 @@ class DeviceDetailViewModel: ObservableObject {
             })
         }
         
+        //calculation
         if isCheckedIn {
             return AnyView(checkOutButton)
         }
@@ -143,7 +158,7 @@ class DeviceDetailViewModel: ObservableObject {
         }
     }
     
-    
+    // calculate if wipe button should show - it should only show for iOS
     func wipeView(_ showModal: Binding<Bool>) -> AnyView? {
         if !device.isiOS {
             return nil
@@ -169,6 +184,7 @@ class DeviceDetailViewModel: ObservableObject {
         )
     }
     
+    //calculate the url for use with the device name button
     func deviceUrl() -> URL? {
         guard let udid = device.UDID else { return nil }
         var urlComponents = credentials.Server

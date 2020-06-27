@@ -11,29 +11,23 @@ import SwiftUI
 struct DeviceListView: View {
     var deviceArray: [Device]
     var credentials: Credentials
+    // access function to set loading in parent view which changes the behavior of the loading icon
     var setIsLoading: (Bool) -> Void
+    // access function to set error description which will pop up error sheet in parent view
     var setErrorDescription: (String) -> Void
 
     var body: some View {
             List(deviceArray) { device in
                 NavigationLink(destination: DeviceDetailView(deviceDetailViewModel: DeviceDetailViewModel(device: device, credentials: self.credentials, setIsLoading: self.setIsLoading, setErrorDescription: self.setErrorDescription)))
                 {
-                DeviceRow(device: device, credentials: self.credentials)
+                DeviceRow(device: device)
                 }
             }
     }
 }
 
-//struct DeviceListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DeviceListView(deviceArray: [Device](), credentials: Credentials(Username: "", Password: "", Server: URLComponents()))
-//    }
-//}
-
-
 struct DeviceRow: View {
     var device: Device
-    var credentials: Credentials
     
     var body: some View {
         HStack {
@@ -56,6 +50,6 @@ struct DeviceRow: View {
 
 struct DeviceRow_Previews: PreviewProvider {
     static var previews: some View {
-        DeviceRow(device: Device(), credentials: Credentials(Username: "", Password: "", Server: URLComponents()))
+        DeviceRow(device: Device())
     }
 }

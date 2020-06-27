@@ -85,9 +85,7 @@ class LoginViewModel: ObservableObject {
             case .success(let devices):
                 completion(self.credentials,devices)
                 DispatchQueue.main.async {
-//                    self.presentationMode.wrappedValue.dismiss()
                     self.loggingIn = false
-                    self.serverError = "itworked?"
                 }
                 do {
                     try self.syncronizeCredentials()

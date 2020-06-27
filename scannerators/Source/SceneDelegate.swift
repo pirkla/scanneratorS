@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        // Create the SwiftUI view that provides the window contents.
+        // Create the SwiftUI view that provides the window contents, checking for a managed app config on creation.
         let contentView = ContentView(contentViewModel: ContentViewModel(credentials: readConfig()))
 
         // Use a UIHostingController as window root view controller.
@@ -59,6 +59,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    /**
+     Check for a managed app config and return credentials if found. Return nil if partially missing or not found.
+     */
     public func readConfig() -> Credentials?{
         if let managedConf = UserDefaults.standard.object(forKey: "com.apple.configuration.managed") as? [String:Any?] {
 
@@ -67,10 +70,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             let serverUrl = URLBuilder.BuildURL(baseURL: urlString)
 
-            guard let networkId = managedConf["username"] as? String else {
+            guard let networkId = managedConf["networkID"] as? String else {
                 return nil
             }
-            guard let apiKey = managedConf["password"] as? String else {
+            guard let apiKey = managedConf["apiKey"] as? String else {
                 return nil
             }
             return Credentials(Username: networkId, Password: apiKey, Server: serverUrl)
@@ -81,11 +84,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         let serverUrl = URLBuilder.BuildURL(baseURL: urlString)
 
-        guard let networkId = Bundle.main.object(forInfoDictionaryKey: "username") as? String else {
+        guard let networkId = Bundle.main.object(forInfoDictionaryKey: "networkID") as? String else {
             return nil
         }
 
-        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "password") as? String else {
+        guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "apiKey") as? String else {
             return nil
         }
         return Credentials(Username: networkId, Password: apiKey, Server: serverUrl)

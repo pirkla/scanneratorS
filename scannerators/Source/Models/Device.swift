@@ -42,10 +42,13 @@ struct Device: Codable, Identifiable {
     
     var isCheckedIn: Bool? {
         get {
-            if notes == "Checked In" {
+            guard let notes = notes else {
+                return nil
+            }
+            if notes.range(of: "Checked In", options: .caseInsensitive) != nil {
                 return true
             }
-            else if notes == "Checked Out" {
+            else if notes.range(of: "Checked Out", options: .caseInsensitive) != nil {
                 return false
             }
             return nil

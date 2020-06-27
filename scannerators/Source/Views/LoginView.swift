@@ -18,6 +18,8 @@ struct LoginView: View {
     
     var body: some View {
         VStack() {
+            
+            // url stack
             HStack(){
                 Text("URL")
                     .multilineTextAlignment(.leading)
@@ -33,6 +35,8 @@ struct LoginView: View {
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
+            
+            // network id stack
             HStack() {
                 Text("Network ID")
                     .frame(width: 90, alignment: .trailing)
@@ -47,6 +51,8 @@ struct LoginView: View {
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
+            
+            // api key stack
             HStack() {
                 Text("API Key")
                     .multilineTextAlignment(.leading)
@@ -59,6 +65,8 @@ struct LoginView: View {
                 .background(Color.init("TextBackground"))
                 .cornerRadius(10)
             }
+            
+            // save credentials stack
             HStack() {
                 Toggle(isOn: $loginViewModel.saveCredentials) {
                 EmptyView()
@@ -69,6 +77,8 @@ struct LoginView: View {
             }
             .frame(width: 350.0, height: 22.0)
             Spacer().frame(height:30)
+            
+            // login button stack
             HStack(alignment:.top) {
                 Button(action: {
                     self.loginViewModel.login() {
@@ -88,11 +98,15 @@ struct LoginView: View {
                 .shadow(color:.black, radius: 3,x: 1, y: 1)
 
             }
+            
+            // error text stack - blank unless there is an error
             HStack {
                 Text(loginViewModel.serverError)
                     .padding(.all, 10.0)
                     .multilineTextAlignment(.center)
             }
+            
+            // spacer to make login button slightly higher - the keyboard covers it up on smaller screens otherwise
             Spacer().frame(height:100)
         }
         .disabled(self.loginViewModel.loggingIn)
