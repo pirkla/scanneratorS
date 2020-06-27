@@ -15,7 +15,7 @@ struct DeviceDetailView: View {
     var body: some View {
       VStack {
         
-        // Device information group
+        // Device information stack
         VStack {
             //button to show device name and link to device's details page in JS
             Button(action: {
@@ -46,9 +46,9 @@ struct DeviceDetailView: View {
             deviceDetailViewModel.checkinStatusView().padding(.bottom, 20.0)
             
         }
-        // action button group
+        // action button stack
         HStack() {
-            // calcualte wipe button
+            // calcualate wipe button
             deviceDetailViewModel.wipeView($deviceDetailViewModel.showModal)
                 .shadow(color:.black, radius: 3,x: 1, y: 1)
             // calculate checkin button

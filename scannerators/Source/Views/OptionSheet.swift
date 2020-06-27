@@ -45,6 +45,7 @@ struct OptionSheet: View {
                 .background(Color.init("TextBackground"))
             }
             .cornerRadius(10)
+            
             // return false button
             Button(action: {
                 self.completion(false)

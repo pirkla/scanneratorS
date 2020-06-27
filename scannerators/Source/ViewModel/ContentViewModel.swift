@@ -103,14 +103,12 @@ class ContentViewModel: ObservableObject{
     }
     
     
-    // func to set error description
     func setErrorDescription(_ description: String){
         DispatchQueue.main.async {
             self.errorDescription = description
         }
     }
     
-    // func to set isLoading
     func setIsLoading(_ isLoading: Bool){
         DispatchQueue.main.async {
             self.isLoading = isLoading

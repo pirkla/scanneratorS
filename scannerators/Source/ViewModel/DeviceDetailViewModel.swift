@@ -158,7 +158,7 @@ class DeviceDetailViewModel: ObservableObject {
         }
     }
     
-    // calculate if wipe button should show - it should only show for iOS
+    // calculate if wipe button should show and set up confirmation modal if clicked - should only show for iOS
     func wipeView(_ showModal: Binding<Bool>) -> AnyView? {
         if !device.isiOS {
             return nil
