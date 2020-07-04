@@ -139,7 +139,7 @@ public struct CodeScannerView: UIViewControllerRepresentable {
         var captureSession: AVCaptureSession!
         var previewLayer: AVCaptureVideoPreviewLayer!
         var delegate: ScannerCoordinator?
-        var cancelButton: UIButton!
+//        var cancelButton: UIButton!
         
 
         override public func viewDidLoad() {
@@ -213,8 +213,6 @@ public struct CodeScannerView: UIViewControllerRepresentable {
             previewLayer.frame = view.layer.bounds
             previewLayer.videoGravity = .resizeAspectFill
             view.layer.addSublayer(previewLayer)
-            cancelButton.frame.origin.y = 10
-            cancelButton.frame.origin.x = previewLayer.frame.width - cancelButton.frame.width - 10
             updateOrientation()
             captureSession.startRunning()
         }
