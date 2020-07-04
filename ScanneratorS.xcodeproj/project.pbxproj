@@ -29,8 +29,6 @@
 		71FD3D54247F241C001CC553 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D53247F241C001CC553 /* ContentView.swift */; };
 		71FD3D59247F241E001CC553 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 71FD3D58247F241E001CC553 /* Preview Assets.xcassets */; };
 		71FD3D5C247F241E001CC553 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71FD3D5A247F241E001CC553 /* LaunchScreen.storyboard */; };
-		71FD3D67247F241E001CC553 /* wiperatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D66247F241E001CC553 /* wiperatorTests.swift */; };
-		71FD3D72247F241E001CC553 /* wiperatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D71247F241E001CC553 /* wiperatorUITests.swift */; };
 		71FD3D83247F2461001CC553 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D80247F2461001CC553 /* URLSessionExtension.swift */; };
 		71FD3D84247F2461001CC553 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D81247F2461001CC553 /* StringExtension.swift */; };
 		71FD3D85247F2461001CC553 /* URLRequestExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D82247F2461001CC553 /* URLRequestExtension.swift */; };
@@ -39,23 +37,6 @@
 		71FD3D90247F465F001CC553 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D8F247F465F001CC553 /* URLBuilder.swift */; };
 		71FD3D93247F46A7001CC553 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71FD3D92247F46A7001CC553 /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		71FD3D63247F241E001CC553 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 71FD3D44247F241C001CC553 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 71FD3D4B247F241C001CC553;
-			remoteInfo = wiperator;
-		};
-		71FD3D6E247F241E001CC553 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 71FD3D44247F241C001CC553 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 71FD3D4B247F241C001CC553;
-			remoteInfo = wiperator;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		710DB8D62482E6260064B088 /* KeychainError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainError.swift; sourceTree = "<group>"; };
@@ -82,12 +63,6 @@
 		71FD3D58247F241E001CC553 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		71FD3D5B247F241E001CC553 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		71FD3D5D247F241E001CC553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71FD3D62247F241E001CC553 /* ScanneratorSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScanneratorSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		71FD3D66247F241E001CC553 /* wiperatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wiperatorTests.swift; sourceTree = "<group>"; };
-		71FD3D68247F241E001CC553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		71FD3D6D247F241E001CC553 /* ScanneratorSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScanneratorSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		71FD3D71247F241E001CC553 /* wiperatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = wiperatorUITests.swift; sourceTree = "<group>"; };
-		71FD3D73247F241E001CC553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		71FD3D80247F2461001CC553 /* URLSessionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		71FD3D81247F2461001CC553 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		71FD3D82247F2461001CC553 /* URLRequestExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLRequestExtension.swift; sourceTree = "<group>"; };
@@ -100,20 +75,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		71FD3D49247F241C001CC553 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		71FD3D5F247F241E001CC553 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		71FD3D6A247F241E001CC553 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -148,8 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				71FD3D4E247F241C001CC553 /* scannerators */,
-				71FD3D65247F241E001CC553 /* wiperatorTests */,
-				71FD3D70247F241E001CC553 /* wiperatorUITests */,
 				71FD3D4D247F241C001CC553 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -158,8 +117,6 @@
 			isa = PBXGroup;
 			children = (
 				71FD3D4C247F241C001CC553 /* Scannerator S.app */,
-				71FD3D62247F241E001CC553 /* ScanneratorSTests.xctest */,
-				71FD3D6D247F241E001CC553 /* ScanneratorSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,24 +141,6 @@
 				71FD3D58247F241E001CC553 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		71FD3D65247F241E001CC553 /* wiperatorTests */ = {
-			isa = PBXGroup;
-			children = (
-				71FD3D66247F241E001CC553 /* wiperatorTests.swift */,
-				71FD3D68247F241E001CC553 /* Info.plist */,
-			);
-			path = wiperatorTests;
-			sourceTree = "<group>";
-		};
-		71FD3D70247F241E001CC553 /* wiperatorUITests */ = {
-			isa = PBXGroup;
-			children = (
-				71FD3D71247F241E001CC553 /* wiperatorUITests.swift */,
-				71FD3D73247F241E001CC553 /* Info.plist */,
-			);
-			path = wiperatorUITests;
 			sourceTree = "<group>";
 		};
 		71FD3D7F247F2461001CC553 /* Extensions */ = {
@@ -275,42 +214,6 @@
 			productReference = 71FD3D4C247F241C001CC553 /* Scannerator S.app */;
 			productType = "com.apple.product-type.application";
 		};
-		71FD3D61247F241E001CC553 /* ScanneratorSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 71FD3D79247F241E001CC553 /* Build configuration list for PBXNativeTarget "ScanneratorSTests" */;
-			buildPhases = (
-				71FD3D5E247F241E001CC553 /* Sources */,
-				71FD3D5F247F241E001CC553 /* Frameworks */,
-				71FD3D60247F241E001CC553 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				71FD3D64247F241E001CC553 /* PBXTargetDependency */,
-			);
-			name = ScanneratorSTests;
-			productName = wiperatorTests;
-			productReference = 71FD3D62247F241E001CC553 /* ScanneratorSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		71FD3D6C247F241E001CC553 /* ScanneratorSUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 71FD3D7C247F241E001CC553 /* Build configuration list for PBXNativeTarget "ScanneratorSUITests" */;
-			buildPhases = (
-				71FD3D69247F241E001CC553 /* Sources */,
-				71FD3D6A247F241E001CC553 /* Frameworks */,
-				71FD3D6B247F241E001CC553 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				71FD3D6F247F241E001CC553 /* PBXTargetDependency */,
-			);
-			name = ScanneratorSUITests;
-			productName = wiperatorUITests;
-			productReference = 71FD3D6D247F241E001CC553 /* ScanneratorSUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -323,14 +226,6 @@
 				TargetAttributes = {
 					71FD3D4B247F241C001CC553 = {
 						CreatedOnToolsVersion = 11.5;
-					};
-					71FD3D61247F241E001CC553 = {
-						CreatedOnToolsVersion = 11.5;
-						TestTargetID = 71FD3D4B247F241C001CC553;
-					};
-					71FD3D6C247F241E001CC553 = {
-						CreatedOnToolsVersion = 11.5;
-						TestTargetID = 71FD3D4B247F241C001CC553;
 					};
 				};
 			};
@@ -348,8 +243,6 @@
 			projectRoot = "";
 			targets = (
 				71FD3D4B247F241C001CC553 /* Scannerator S */,
-				71FD3D61247F241E001CC553 /* ScanneratorSTests */,
-				71FD3D6C247F241E001CC553 /* ScanneratorSUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -362,20 +255,6 @@
 				71FD3D5C247F241E001CC553 /* LaunchScreen.storyboard in Resources */,
 				715E92192495B71600C0E1C0 /* Assets.xcassets in Resources */,
 				71FD3D59247F241E001CC553 /* Preview Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		71FD3D60247F241E001CC553 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		71FD3D6B247F241E001CC553 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,36 +294,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		71FD3D5E247F241E001CC553 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				71FD3D67247F241E001CC553 /* wiperatorTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		71FD3D69247F241E001CC553 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				71FD3D72247F241E001CC553 /* wiperatorUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		71FD3D64247F241E001CC553 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 71FD3D4B247F241C001CC553 /* Scannerator S */;
-			targetProxy = 71FD3D63247F241E001CC553 /* PBXContainerItemProxy */;
-		};
-		71FD3D6F247F241E001CC553 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 71FD3D4B247F241C001CC553 /* Scannerator S */;
-			targetProxy = 71FD3D6E247F241E001CC553 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		71FD3D5A247F241E001CC553 /* LaunchScreen.storyboard */ = {
@@ -630,86 +480,6 @@
 			};
 			name = Release;
 		};
-		71FD3D7A247F241E001CC553 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = wiperatorTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperatorTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScanneratorS.app/ScanneratorS";
-			};
-			name = Debug;
-		};
-		71FD3D7B247F241E001CC553 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = wiperatorTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperatorTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScanneratorS.app/ScanneratorS";
-			};
-			name = Release;
-		};
-		71FD3D7D247F241E001CC553 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = wiperatorUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperatorUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = wiperator;
-			};
-			name = Debug;
-		};
-		71FD3D7E247F241E001CC553 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = wiperatorUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pirklator.wiperatorUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = wiperator;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -727,24 +497,6 @@
 			buildConfigurations = (
 				71FD3D77247F241E001CC553 /* Debug */,
 				71FD3D78247F241E001CC553 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		71FD3D79247F241E001CC553 /* Build configuration list for PBXNativeTarget "ScanneratorSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				71FD3D7A247F241E001CC553 /* Debug */,
-				71FD3D7B247F241E001CC553 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		71FD3D7C247F241E001CC553 /* Build configuration list for PBXNativeTarget "ScanneratorSUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				71FD3D7D247F241E001CC553 /* Debug */,
-				71FD3D7E247F241E001CC553 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
