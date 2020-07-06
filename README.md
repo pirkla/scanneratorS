@@ -1,5 +1,5 @@
 # Scannerator S
-Get the iOS version on the app store: Currently In Review   
+Get the iOS version on the app store: https://apps.apple.com/app/id1522073545 
 Get the latest macOS version: https://github.com/pirkla/scannerators/releases   
 
 The User Guide: https://wiki.pirklator.com/en/ScanneratorS/guide
